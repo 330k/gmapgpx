@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ja">
+<!--
+    Copyright (c) 2014 Kei Misawa
+
+    This software is released under the MIT License.
+
+    http://opensource.org/licenses/mit-license.php
+-->
+<head>
+<meta charset="utf-8"/>
+<title>GPX Visualize</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+</head>
+<body>
+<div id="menu">
+Select GPX File: <input type="file" id="gpx_files" />
+X-axis: <select id="xaxis" onchange="drawChart()">
+<option value="dist" selected="selected">Distance</option>
+<!--<option value="ele">Elevation</option>
+<option value="speed">Speed</option>-->
+<option value="time">Time</option>
+<option value="dura">Duration</option>
+<option value="lat">Latitude</option>
+<option value="lon">Longitude</option>
+</select>
+Y-axis: <select id="yaxis" onchange="drawChart()">
+<option value="dist">Distance</option>
+<option value="ele" selected="selected">Elevation</option>
+<option value="speed">Speed</option>
+<option value="time">Time</option>
+<option value="dura">Duration</option>
+<option value="grad">Gradient</option>
+<option value="lat">Latitude</option>
+<option value="lon">Longitude</option>
+</select>
+Mean Filter: <select id="meanfilter" onchange="drawChart()">
+<option value="0" selected="selected">Disabled</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="5">5</option>
+<option value="10">10</option>
+<option value="20">20</option>
+<option value="50">50</option>
+</select>
+Size: <select id="size" onchange="resizeChart()">
+<option value="400x300">400 * 300</option>
+<option value="640x480" selected="selected">640 * 480</option>
+<option value="800x600">800 * 600</option>
+<option value="1024x768">1024 * 768</option>
+<!--<option value="fullxfull">Full</option>-->
+</select>
+<a id="download_svg" style="display:none;">Download as SVG</a>
+</div>
+<div id="container"></div>
+<script type="text/javascript">
+var parser = new DOMParser();
+var serializer = new XMLSerializer();
+
+var gpxdata = {};
+
+function selectGPXFile(evt){
+	'use strict';
+	try{
+		var files = evt.target.files;
+
+		for(var i = 0; i < files.length; i++){
+			readGPX(files[i]);
+		}
+	}catch(err){
+		alert(err);
+	}
+}
+
+function readGPX(file){
+	'use strict';
+	var reader = new FileReader();
+	reader.onload = function(){
+		parseGPX(reader.result, file.name);
+	};
+	reader.readAsText(file, 'utf-8');
+}
+
+function parseGPX(gpx, filename){
+	'use strict';
+	var result_doc = parser.parseFromString(gpx, 'text/xml');
+	
+	gpxdata = {
+		"time":[],
+		"dura":[],
+		"ele":[],
+		"lat":[],
+		"lon":[],
+		"dist":[],
+		"speed":[],
+		"grad":[],
+		"title":filename
+	};
+	
+	var trkpts = result_doc.getElementsByTagName('trkpt');
+	
+	for(var i = 0; i < trkpts.length; i++){
+		var lat = trkpts[i].getAttribute('lat') - 0;
+		var lon = trkpts[i].getAttribute('lon') - 0;
+		var ele = trkpts[i].getElementsByTagName('ele');
+		var time = trkpts[i].getElementsByTagName('time');
+		var dist;
+		
+		gpxdata.lat[i] = lat;
+		gpxdata.lon[i] = lon;
+		
+		if(i > 0){
+			dist = 0.001 * hubeny(lat, lon, gpxdata.lat[i - 1], gpxdata.lon[i - 1]);
+			gpxdata.dist[i] = (gpxdata.dist[i - 1] + dist).toFixed(3) - 0;
+		}else{
+			dist = 0.0;
+			gpxdata.dist[i] = 0.0;
+		}
+		
+		if(ele.length){
+			gpxdata.ele[i] = (ele[0].firstChild.nodeValue - 0).toFixed(2) - 0;
+			if(i > 0){
+				gpxdata.grad[i] = ((gpxdata.ele[i] - gpxdata.ele[i - 1]) / dist).toFixed(3) - 0;
+			}else{
+				gpxdata.grad[i] = null;
+			}
+		}
+		
+		if(time.length){
+			var t = (new Date(time[0].firstChild.nodeValue)).getTime() + 9.0 * 3600000.0;
+			gpxdata.time[i] = t;
+			if(i > 0){
+				gpxdata.speed[i] = (3600000.0 * dist / (t - gpxdata.time[i - 1])).toFixed(3) - 0;
+				gpxdata.dura[i] = t - gpxdata.time[0];
+			}else{
+				gpxdata.speed[i] = null;
+				gpxdata.dura[i] = 0.0;
+			}
+		}
+	}
+	
+	drawChart();
+	return 0;
+}
+function hubeny(lat1, lon1, lat2, lon2){
+	'use strict';
+	var a = 6378137.0;
+	var b = 6356752.314;
+	var e = Math.sqrt(1.0 - b * b / (a * a));
+	var rlat1 = lat1 * Math.PI / 180.0;
+	var rlon1 = lon1 * Math.PI / 180.0;
+	var rlat2 = lat2 * Math.PI / 180.0;
+	var rlon2 = lon2 * Math.PI / 180.0;
+	var latdiff = rlat1 - rlat2;
+	var londiff = rlon1 - rlon2;
+	var latave = 0.5*(rlat1 + rlat2);
+	var w = Math.sqrt(1.0 - Math.pow(Math.sin(latave)*e,2));
+	var meridian = a*(1.0 - e*e)/(w*w*w);
+	var n = a/w;
+	
+	return Math.sqrt(Math.pow(latdiff*meridian, 2) + Math.pow(londiff*n*Math.cos(latave), 2));
+}
+
+function drawChart(){
+	'use strict';
+	var xname = $('#xaxis').val();
+	var yname = $('#yaxis').val();
+	var alias = {
+		dist: 'Distance (km)',
+		ele: 'Elevation (m)',
+		time: 'Time',
+		dura: 'Duration',
+		speed: 'Speed (km/h)',
+		grad: 'Gradient'
+	};
+	createChart(xname, yname, alias[xname], alias[yname]);
+}
+function createChart(xname, yname, xtitle, ytitle){
+	'use strict';
+	var data = {
+		chart: {
+			type: 'line',
+			animation: false,
+			zoomType: 'xy',
+			events: {
+				load: function() {
+					if(window.URL && window.URL.createObjectURL){
+						$('#download_svg').attr('href', 
+							window.URL.createObjectURL(new Blob([serializer.serializeToString(document.getElementsByTagName('svg')[0])], {type:'image/svg+xml'}))
+						).attr('download', gpxdata.title.replace('.gpx', ".svg"));
+					}else{
+						$('#download_svg').attr('href',
+							'data:application/octet-stream,' + 
+							encodeURIComponent(serializer.serializeToString(document.getElementsByTagName('svg')[0])
+						));
+					}
+				}
+			}
+		},
+		title: {
+			text: ytitle
+		},
+		xAxis: {
+			title: {
+				text: xtitle
+			},
+			gridLineWidth: 1,
+			lineColor: '#000',
+			tickColor: '#000'
+		},
+		yAxis: {
+			title: {
+				text: ytitle
+			},
+			gridLineWidth: 1,
+			lineColor: '#000',
+			tickColor: '#000'
+		},
+		plotLines: [{
+			value: 0,
+			width: 4,
+			color: '#808080'
+		}],
+		plotOptions: {
+			series: {
+				animation: false,
+				marker: {
+					enabled: false
+				}
+			}
+		},
+		series: [{
+			name: gpxdata.title,
+			data: []
+		}]
+	};
+	if(xname === 'time'){
+		data.xAxis.type = 'datetime';
+	}
+	if(xname === 'dura'){
+		data.xAxis.type = 'datetime';
+		data.xAxis.dateTimeLabelFormats = {
+			hour: '%H:%M',
+			day: '%H:%M',
+			month: '%H:%M',
+			year: '%H:%M',
+		};
+	}
+	
+	if(yname === 'dist'){
+		data.yAxis.min = 0.0;
+	}
+	if(yname === 'speed'){
+		data.yAxis.min = 0.0;
+	}
+	if(yname === 'dura'){
+		data.yAxis.min = 0.0;
+	}
+	
+	var r = $('#meanfilter').val() - 0;
+	for(var i = 0; i < gpxdata[xname].length; i++){
+		var v = 0.0;
+		var c = 0;
+		for(var j = i - r; j <= i + r; j++){
+			if((0 <= j) && (j < gpxdata[xname].length)){
+				v += gpxdata[yname][j];
+				c++;
+			}
+		}
+		if((isNaN(v)) || (v === Number.POSITIVE_INFINITY) || (v === Number.NEGATIVE_INFINITY)){
+			v = null;
+		}
+		data.series[0].data[i] = [gpxdata[xname][i], v / c];
+	}
+	
+	$('#container').highcharts(data);
+	resizeChart();
+}
+
+function resizeChart(){
+	'use strict';
+	var width = $('#size').val().replace(/(.+)x(.+)/, '$1');
+	var height = $('#size').val().replace(/(.+)x(.+)/, '$2');
+	
+	if(width === 'full'){
+		width = $('#container').width();
+	}
+	if(height === 'full'){
+		height = $('body').height() - $('#menu').height();
+	}
+	$('#container').highcharts().setSize(width, height);
+}
+
+$(function(){
+	'use strict';
+	$('#container').highcharts({});
+	resizeChart();
+	$('#gpx_files').change(selectGPXFile);
+});
+</script>
+
+</body>
+</html>

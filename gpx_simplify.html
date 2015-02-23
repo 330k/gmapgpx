@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ja">
+<!--
+    Copyright (c) 2014 Kei Misawa
+
+    This software is released under the MIT License.
+
+    http://opensource.org/licenses/mit-license.php
+-->
+<head>
+<meta charset="utf-8"/>
+<title>GPX Simplify</title>
+</head>
+<body>
+Select GPX File: <input type="file" id="gpx_files" multiple="multiple" />
+<label><input type="checkbox" id="delete_children" checked="checked" />子要素を削除</label>
+<select id="reduce_points">
+<option value="0">間引きなし</option>
+<option value="100">100 points</option>
+<option value="200">200 points</option>
+<option value="400">400 points</option>
+<option value="800">800 points</option>
+<option value="2000">2000 points</option>
+<option value="4000">4000 points</option>
+<option value="8000">8000 points</option>
+</select>
+<div id="gpx_download"></div>
+<textarea id="gpx_after" style="display:none;width:100%; height:200px;"></textarea>
+<textarea id="xsl" style="display:none;">
+<xsl:stylesheet version="1.0"
+ xmlns:gpx10="http://www.topografix.com/GPX/1/0"
+ xmlns:gpx11="http://www.topografix.com/GPX/1/1"
+ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+  <xsl:template match="@*|node()">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|node()"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="gpx10:trkpt|gpx11:trkpt">
+    <xsl:element name="trkpt" namespace="{namespace-uri()}">
+      <xsl:attribute name="lat">
+        <xsl:value-of select="@lat"/>
+      </xsl:attribute>
+      <xsl:attribute name="lon">
+        <xsl:value-of select="@lon"/>
+      </xsl:attribute>
+    </xsl:element>
+  </xsl:template>
+
+</xsl:stylesheet>
+</textarea>
+<script type="text/javascript">
+var parser = new DOMParser();
+var serializer = new XMLSerializer();
+
+function selectGPXFile(evt){
+	'use strict';
+	try{
+		var files = evt.target.files;
+	
+		var e = document.getElementById('gpx_download');
+		while(e.firstChild) e.removeChild(e.firstChild);
+	
+		for(var i = 0; i < files.length; i++){
+			readGPX(files[i]);
+		}
+	}catch(err){
+		alert('ブラウザが対応していません');
+	}
+}
+
+function readGPX(file){
+	'use strict';
+	var reader = new FileReader();
+	reader.onload = function(){
+		var result = simplifyGPX(reader.result);
+		document.getElementById('gpx_after').value = result;
+		createGPXDownloadLink(result, file.name);
+	};
+	reader.readAsText(file, 'utf-8');
+}
+
+function simplifyGPX(original_gpx){
+	'use strict';
+	var result_doc = parser.parseFromString(original_gpx, 'text/xml');
+	var result_gpx;
+	
+	if(document.getElementById('delete_children').checked){
+		var xsltproc = new XSLTProcessor();
+		xsltproc.importStylesheet(parser.parseFromString(document.getElementById('xsl').value, 'text/xml'));
+		result_doc = xsltproc.transformToDocument(result_doc);
+	}
+	
+	var reducedPoints = document.getElementById('reduce_points').value - 0;
+	var trksegs = result_doc.getElementsByTagName('trkseg');
+	
+	for(var i = 0; i < trksegs.length; i++){
+		if(reducedPoints > 0){
+			var trkpts = trksegs[i].getElementsByTagName('trkpt');
+			if(reducedPoints < trkpts.length){
+				console.log(trkpts.length);
+				reducePoints(trkpts, reducedPoints);
+				console.log(trksegs[i].getElementsByTagName('trkpt').length);
+			}
+		}
+	}
+	
+	result_gpx = serializer.serializeToString(result_doc).replace(/\<trkpt(.*?)\/\>/g, '<trkpt$1><\/trkpt>');
+	
+	return result_gpx;
+}
+
+function reducePoints(trkpts, targetPoints){
+	'use strict';
+	var pts = [];
+	var queue = new PriorityQueue();
+	var flag = [];
+	var removenodes = [];
+	var i = 0;
+	var farthest = null;
+	
+	var degree = Math.PI / 180.0;
+	var quadpi = Math.PI / 4.0;
+	
+	for(i = 0; i < trkpts.length; i++){
+		pts[i] = [
+			(trkpts[i].getAttribute('lon') - 0) * degree,
+			Math.log(Math.abs(Math.tan(quadpi + 0.5 * (trkpts[i].getAttribute('lat') - 0) * degree)))
+		];
+		flag[i] = true;
+	}
+	
+	farthest = findFarthest(pts, 0, pts.length - 1);
+	queue.enqueue(farthest.dist, farthest);
+	flag[0] = false;
+	flag[pts.length - 1] = false;
+	var count = 2;
+	
+	while(queue.size() && count < targetPoints){
+		var v = queue.dequeue();
+		flag[v.pos] = false;
+		count++;
+		
+		if(v.start + 2 <= v.pos){
+			farthest = findFarthest(pts, v.start, v.pos);
+			queue.enqueue(farthest.dist, farthest);
+		}
+		if(v.pos + 2 <= v.end){
+			farthest = findFarthest(pts, v.pos, v.end);
+			queue.enqueue(farthest.dist, farthest);
+		}
+	}
+
+	for(i = 0; i < pts.length; i++){
+		if(flag[i]){
+			removenodes.push(trkpts[i]);
+		}
+	}
+	for(i = 0; i < removenodes.length; i++){
+		if(removenodes[i].nextSibling.nodeType === 3){
+			removenodes[i].parentNode.removeChild(removenodes[i].nextSibling);
+		}
+		removenodes[i].parentNode.removeChild(removenodes[i]);
+	}
+}
+
+function findFarthest(pts, start, end){
+	'use strict';
+	var a = pts[start];
+	var b = pts[end];
+	var d = 0.0;
+	var m = -Number.MAX_VALUE;
+	var c = -1;
+	
+	for(var i = start + 1; i < end; i++){
+		d = segmentPointDistance(a[0], a[1], b[0], b[1], pts[i][0], pts[i][1]);
+		if(m < d){
+			m = d;
+			c = i;
+		}
+	}
+	
+	return {start:start, end:end, pos:c, dist:m};
+}
+
+function segmentPointDistance(ax, ay, bx, by, px, py){
+	'use strict';
+	var t = (ax * ax + ay * ay + bx * px - ax * (bx + px) + by * py - ay * (by + py))/(ax * ax + ay * ay - 2 * ax * bx + bx * bx - 2 * ay * by + by * by);
+	var x = ax - (ax - bx) * t;
+	var y = ay - (ay - by) * t;
+	
+	if((0 <= t) && (t <= 1)){
+		return ((x - px) * (x - px) + (y - py) * (y - py));
+	}else if(t > 1){
+		return ((bx - px) * (bx - px) + (by - py) * (by - py));
+	}else{
+		// includes A == B
+		return ((ax - px) * (ax - px) + (ay - py) * (ay - py));
+	}
+}
+
+
+// Pairingヒープ
+function PriorityQueue(){
+	'use strict';
+	this.name = 'Pairing Heap';
+	this._size = 0;
+	this._root = null;
+	
+	this._merge = function (i, j){
+		if(i === null) return j;
+		if(j === null) return i;
+		
+		if(i.p < j.p){
+			var ret = i;
+			i = j;
+			j = ret;
+		}
+		j.next = i.head;
+		i.head = j;
+		
+		return i;
+	};
+	this._mergeList = function (s){
+		var n = null;
+		
+		while(s !== null){
+			var a = s;
+			var b = null;
+			s = s.next;
+			a.next = null;
+			if(s !== null){
+				b = s;
+				s = s.next;
+				b.next = null;
+			}
+			a = this._merge(a, b);
+			a.next = n;
+			n = a;
+		}
+		while(n !== null){
+			var j = n;
+			n = n.next;
+			s = this._merge(j, s);
+		}
+		return s;
+	};
+	
+	this.enqueue = function(priority, value){
+		this._root = this._merge(this._root, {
+			p: priority,
+			v: value,
+			next: null,
+			head: null
+		});
+		this._size++;
+	};
+	this.dequeue = function(){
+		var result = this._root.v;
+		this._root = this._mergeList(this._root.head);
+		this._size--;
+		
+		return result;
+	};
+	this.size = function(){
+		return this._size;
+	};
+	
+	return this;
+}
+
+function createGPXDownloadLink(gpx, filename){
+	'use strict';
+	try{
+		var e = document.createElement('a');
+	
+		if(window.URL && window.URL.createObjectURL){
+			var blob = new Blob([gpx],{type:'application/xml'});
+	
+			e.href = window.URL.createObjectURL(blob);
+			e.setAttribute('target', '_blank');
+			if(filename){
+				e.setAttribute('download', filename);
+				e.appendChild(document.createTextNode('Download ' + filename));
+			}else{
+				e.setAttribute('download', 'download.gpx');
+				e.appendChild(document.createTextNode('Download GPX'));
+			}
+	
+		}else{
+			e.href = 'data:application/octet-stream,' + encodeURIComponent(gpx);
+			e.setAttribute('download', 'download.gpx');
+			
+			e.appendChild(document.createTextNode('Download GPX'));
+		}
+		
+		document.getElementById('gpx_download').appendChild(e);
+		
+	}catch(err){
+		alert('ブラウザが対応していません');
+	}
+}
+
+document.getElementById('gpx_files').addEventListener('change', selectGPXFile, false);
+</script>
+
+</body>
+</html>
