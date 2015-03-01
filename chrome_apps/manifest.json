@@ -1,0 +1,21 @@
+{
+"manifest_version": 2,
+"name": "GPX Creator from Google Maps",
+"description": "GPX Creator from Google Maps",
+"version": "1.0",
+"icons": {
+"128": "128.png"
+},
+"app": {
+"urls": [
+"http://hp.vector.co.jp/authors/VA022638/create_gpx_route.html"
+],
+"launch": {
+"web_url": "http://hp.vector.co.jp/authors/VA022638/create_gpx_route.html"
+}
+},
+"permissions": [
+"unlimitedStorage",
+"notifications"
+]
+}
