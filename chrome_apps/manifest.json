@@ -8,10 +8,10 @@
 },
 "app": {
 "urls": [
-"http://hp.vector.co.jp/authors/VA022638/create_gpx_route.html"
+"http://330k.github.io/gmapgpx/create_gpx_route.html"
 ],
 "launch": {
-"web_url": "http://hp.vector.co.jp/authors/VA022638/create_gpx_route.html"
+"web_url": "http://330k.github.io/gmapgpx/create_gpx_route.html"
 }
 },
 "permissions": [
