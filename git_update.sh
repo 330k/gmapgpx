@@ -7,7 +7,7 @@ git push origin gh-pages
 
 git checkout master
 git merge gh-pages -m 'update from gh-pages'
-get push origin master
+git push origin master
 
 git checkout gh-pages
 
