@@ -81,14 +81,14 @@ button.ui-dialog-titlebar-close	{ display: none; }
   <input id="input_download_filename" type="text" value="download.gpx" />
   <a id="gpx_download_link">Download</a>
   <select id="select_reduce_points">
-   <option value="100">Reduce into 100 points</option>
-   <option value="200">Reduce into 200 points</option>
-   <option value="400">Reduce into 400 points</option>
-   <option value="800">Reduce into 800 points</option>
-   <option value="2000">Reduce into 2000 points</option>
-   <option value="4000">Reduce into 4000 points</option>
-   <option value="8000">Reduce into 8000 points</option>
-   <option value="0" selected="selected">No reduction</option>
+   <option value="100">100 points</option>
+   <option value="200">200 points</option>
+   <option value="400">400 points</option>
+   <option value="800">800 points</option>
+   <option value="2000">2000 points</option>
+   <option value="4000">4000 points</option>
+   <option value="8000">8000 points</option>
+   <option value="0" selected="selected">Full</option>
   </select>
   <button id="button_add_elevation">Add Elevation</button>
   <div id="gpx_info"></div>
@@ -233,6 +233,10 @@ function initialize(){
 			$('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
 			$('#graph_panel').resize();
 		}
+	}).resize(function(){
+		if(typeof localStorage !== 'undefined'){
+			localStorage.setItem('side_panel_width', $('#side_panel').width());
+		}
 	});
 	$('#graph_panel').resizable({
 		handles: 'n',
@@ -241,6 +245,9 @@ function initialize(){
 		}
 	}).resize(function(){
 		$('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), $('#graph_panel').innerHeight());
+		if(typeof localStorage !== 'undefined'){
+			localStorage.setItem('graph_panel_height', $('#graph_panel').height());
+		}
 	});
 
 	// Input Check
@@ -1008,7 +1015,9 @@ var drawSimplifiedLine = (function(){
 				});
 			}
 		}else{
-			linePath.setMap(null);
+			if(linePath){
+				linePath.setMap(null);
+			}
 			linePath = null;
 		}
 	};
