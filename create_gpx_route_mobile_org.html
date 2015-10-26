@@ -574,12 +574,6 @@ var addElevationToGPX = (function(){
 			}
 		}catch(err){
 		}
-		window.unload = (function(){
-			try{
-				localStorage.setItem('elecache', JSON.stringify(elecache));
-			}catch(err){
-			}
-		});
 	}
 	
 	function getElevation(locations, callback) {
@@ -655,6 +649,10 @@ var addElevationToGPX = (function(){
 						}
 						count += locations.length;
 			
+						try{
+							localStorage.setItem('elecache', JSON.stringify(elecache));
+						}catch(err){
+						}
 						if(count >= total){
 							callback({
 								state: 'finished',
