@@ -2,8 +2,8 @@
 Create GPX route data from Google Maps
 
 # URL
-PC: http://330k.github.io/gmapgpx/create_gpx_route.html
-Smartphone: http://330k.github.io/gmapgpx/create_gpx_route_mobile.html
+* PC: http://330k.github.io/gmapgpx/create_gpx_route.html
+* Smartphone: http://330k.github.io/gmapgpx/create_gpx_route_mobile.html
 
 # Usage
 1. visit above url with your browser
