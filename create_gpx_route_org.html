@@ -314,6 +314,9 @@ function initialize(){
 			}
 		});
 	}).attr('title', 'add elevation to each trkpt element from Google Maps Elevation API');
+	$('#graph_canvas').click(function(){
+		$('#button_add_elevation').click();
+	});
 
 	$('#input_download_filename').change(function(){
 		$('#gpx_download_link').attr('download', $(this).val());
@@ -930,7 +933,9 @@ var createGraphData = (function(){
 				},
 				gridLineWidth: 1,
 				lineColor: '#000',
-				tickColor: '#000'
+				tickColor: '#000',
+				min: 0,
+				max: trkseg[trkseg.length - 1].total_distance * 0.001
 			},
 			yAxis: {
 				title: {
