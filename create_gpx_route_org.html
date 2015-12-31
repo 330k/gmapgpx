@@ -490,7 +490,7 @@ function createGPXDownloadLink(){
 		setTimeout(function(){
 			var info = calcDistance();
 			$('#gpx_info').html(
-				'<div>' + info.points + ' points<\/div>' +
+				'<div>' + trkseg.length + ' points to ' + info.points + ' points<\/div>' +
 				'<div>Total Distance: ' + (info.total_distance * 0.001).toFixed(3) + ' km<\/div>' +
 				'<div>Total Elevation: ' + info.total_elevation.toFixed(2) + ' m<\/div>'
 			);

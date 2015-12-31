@@ -901,7 +901,9 @@ var createGraphData = (function(){
 				},
 				gridLineWidth: 1,
 				lineColor: '#000',
-				tickColor: '#000'
+				tickColor: '#000',
+				min: 0,
+				max: trkseg[trkseg.length - 1].total_distance
 			},
 			yAxis: {
 				title: {
