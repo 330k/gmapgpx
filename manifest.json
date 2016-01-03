@@ -1,5 +1,9 @@
 {
-	"name": "GMapGPX",
+	"manifest_version": 2,
+	"short_name": "GMapGPX",
+	"name": "GPX Create with Google Maps",
+	"description": "Create route and download gpx files with Google Maps API v3",
+	"display": "standalone",
 	"icons": [
 		{
 			"src": "/android-chrome-36x36.png",
