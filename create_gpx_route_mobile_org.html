@@ -15,6 +15,9 @@
 <meta name="description" content="Create GPX file of routes with Google Maps API v3">
 <meta name="author" content="330k">
 <meta name="application-name" content="GMaps2GPX">
+<!-- WebApp -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 
 <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css" />
 <link rel="apple-touch-icon" sizes="57x57" href="apple-touch-icon-57x57.png" />
@@ -27,6 +30,7 @@
 <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
 <link rel="manifest" href="manifest.json" />
+
 <meta name="msapplication-TileColor" content="#da532c" />
 <meta name="theme-color" content="#ffffff" />
 <style type="text/css">
@@ -136,6 +140,8 @@ var gpxdata = {
 var directionsDisplay = null;
 var directionsService = null;
 var elevationService = null;
+
+navigator.standalone = navigator.standalone || (screen.height-document.documentElement.clientHeight<40);
 
 function loadScript(url){
 	'use strict';
