@@ -155,7 +155,7 @@ loadScript([
   'http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js',
   'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js',
   'http://code.highcharts.com/highcharts.js',
-  'http://maps.google.com/maps/api/js?sensor=true&callback=initialize'
+  'http://maps.google.com/maps/api/js?callback=initialize'
 ]);
 
 function initialize(){
@@ -912,6 +912,10 @@ var createGraphData = (function(){
   return function(){
     var trkseg = gpxdata.trksegs[0];
     var pointdata = {};
+    var xmax = 100.0;
+    if(typeof trkseg[0] !== 'undefined'){
+      xmax = trkseg[trkseg.length - 1].total_distance * 0.001;
+    }
     var data = {
       chart: {
         type: 'area',
@@ -930,7 +934,7 @@ var createGraphData = (function(){
         lineColor: '#000',
         tickColor: '#000',
         min: 0,
-        max: trkseg[trkseg.length - 1].total_distance * 0.001
+        max: xmax
       },
       yAxis: {
         title: {
