@@ -1,21 +1,15 @@
 {
-	"manifest_version": 2,
-	"name": "GPX Creator from Google Maps",
-	"description": "GPX Creator from Google Maps",
-	"version": "1.0.0.0",
-	"icons": {
-		"128": "128.png"
-	},
-	"app": {
-		"urls": [
-			"http://330k.github.io/gmapgpx/create_gpx_route.html"
-		],
-		"launch": {
-			"web_url": "http://330k.github.io/gmapgpx/create_gpx_route.html"
-		}
-	},
-	"permissions": [
-		"unlimitedStorage",
-		"notifications"
-	]
+  "manifest_version": 2,
+  "name": "GPX Creator with Google Maps",
+  "short_name": "GMapGPX",
+  "description": "Create and download a .gpx file with Google Maps API v3, designed mainly for cycling.",
+  "version": "1.0.0.0",
+  "icons": {
+    "128": "128.png"
+  },
+  "app": {
+    "launch": {
+      "web_url": "http://330k.github.io/gmapgpx/create_gpx_route.html"
+    }
+  }
 }
