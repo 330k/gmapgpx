@@ -121,9 +121,6 @@ body  { height: 100%; margin: 0; padding: 0; user-select: none;}
  </div>
 </div>
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.2/jquery.mobile.min.js"></script>
-<script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
 <script type="text/javascript" defer="defer">
 /* global $, google, BlobBuilder */
 var map;
@@ -138,6 +135,25 @@ var gpxdata = {
 var directionsDisplay = null;
 
 navigator.standalone = navigator.standalone || (screen.height-document.documentElement.clientHeight<40);
+
+function loadScript(url){
+  'use strict';
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = url[0];
+  if(url.length > 1){
+    script.onload = function(){
+      loadScript(url.slice(1));
+    };
+  }
+  document.body.appendChild(script);
+}
+loadScript([
+  'http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js',
+  'http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.2/jquery.mobile.min.js',
+  'http://code.highcharts.com/highcharts.js',
+  'http://maps.google.com/maps/api/js?callback=initialize'
+]);
 
 function initialize(){
   'use strict';
@@ -970,6 +986,5 @@ var createGraphData = (function(){
   ga('send', 'pageview');
 
 </script>
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?callback=initialize"></script>
 </body>
 </html>
