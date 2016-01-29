@@ -121,6 +121,32 @@ body  { height: 100%; margin: 0; padding: 0; user-select: none;}
  </div>
 </div>
 
+<div id="page_usage" data-role="page" data-pagename="Usage">
+ <div role="main" class="ui-content">
+<h4>Basics</h4>
+<ul>
+<li>Input origin and destination</li>
+<li>Click "Calculate Route" button</li>
+<li>Download GPX file by "Download GPX"</li>
+</ul>
+<h4>Elevation</h4>
+<ul>
+<li>Click "Add Elevation" button if you need elevation data</li>
+<li>Elevation data is shown in right bottom area</li>
+<li>Elevation request rate is 100 points / sec to avoid limitations of Google Maps Elevation API</li>
+</ul>
+<h4>Waypoints Simplify</h4>
+<ul>
+<li>The number of waypoints is up to 800 points by default</li>
+<li>This limit can be changed by selecting option ("Full" means no reduction)</li>
+<li>Ramer-Douglas-Peucker algorythm is used to reduce waypoints</li>
+<li>Simplified line is shown by red one</li>
+<li>Distance is calculated against simplified line</li>
+</ul>
+<a href="create_gpx_route.html">Desktop Edition</a>
+ </div>
+</div>
+
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.2/jquery.mobile.min.js"></script>
 <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>

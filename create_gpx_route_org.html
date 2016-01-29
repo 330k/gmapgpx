@@ -120,6 +120,41 @@ button.ui-dialog-titlebar-close  { display: none; }
 <div id="tab_directions">
  <div id="directions_panel"></div>
 </div>
+<h3>Usage</h3>
+<div id="tab_usage">
+<h4>Basics</h4>
+<ul>
+<li>Input origin and destination</li>
+<li>Click "Calculate Route" button</li>
+<li>Download GPX file by "Download GPX"</li>
+</ul>
+<h4>Route Modification</h4>
+<ul>
+<li>You can change origination, destination, and waypoints by drag and drop operation</li>
+<li>Right click in map area, you can
+ <ul>
+  <li>Set the clicked point as origin</li>
+  <li>Set the clicked point as destination</li>
+  <li>Clear all waypoints</li>
+  <li>Reverse origin and destination (waypoints order also reversed)</li>
+ </ul>
+</ul>
+<h4>Elevation</h4>
+<ul>
+<li>Click "Add Elevation" button if you need elevation data</li>
+<li>Elevation data is shown in right bottom area</li>
+<li>Elevation request rate is 100 points / sec to avoid limitations of Google Maps Elevation API</li>
+</ul>
+<h4>Waypoints Simplify</h4>
+<ul>
+<li>The number of waypoints is up to 4000 points by default</li>
+<li>This limit can be changed by selecting option ("Full" means no reduction)</li>
+<li>Ramer-Douglas-Peucker algorythm is used to reduce waypoints</li>
+<li>Simplified line is shown by red one</li>
+<li>Distance is calculated against simplified line</li>
+</ul>
+<a href="create_gpx_route_mobile.html">Mobile Edition</a>
+</div>
 </div>
 </div>
 
