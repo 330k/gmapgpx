@@ -44,14 +44,14 @@ body  { height: 100%; margin: 0; padding: 0; }
 #side_panel  { position: absolute; left: 0px; top: 0px; width: 30%; min-width: 200px; height: 100%; overflow: hidden; }
 #accordion  { font-size: 80%; }
 
-#tab_search div { position: relative; }
-#tab_search input[type="text"]  { width: 100%; padding-left: 16px; }
-#tab_search input[type="submit"]  { width: 100%; padding-left: 16px; }
+#tab_search input[type="text"]  { width: 100%; }
+#tab_search input[type="submit"]  { width: 100%; }
 #tab_search select  { width: 100%; }
 #waypoints { list-style-type: none; margin: 0; padding: 0; width: 100%; }
 #waypoints li { position: relative; }
-#waypoints li input[type="text"] { z-index: 9999; }
-#tab_search span.ui-icon { position: absolute; width: 16px; margin: auto 0 auto 0; }
+#waypoints li input[type="text"] {  }
+#tab_search div { position: relative; }
+#tab_search span.ui-icon { position: absolute; right: 0px; width: 16px; }
 
 #gpx_download_link  { display: block; width: 100%; }
 #tab_gpx select  { width: 100%; }
@@ -216,10 +216,10 @@ function initialize(){
   });
   // Sortable
   $('#waypoints').sortable({
-    update: function(event, ui){
-      
-    }
   }).disableSelection();
+  $('#waypoints input').bind('click.sortable mousedown.sortable',function(e){
+    e.target.focus();
+  }); // Fix for Firefox
   
   // Dialog
   $('<div id="dialog"><\/div>').dialog({
@@ -341,27 +341,31 @@ function initialize(){
   });
 
   // Button Events
-  $('#set_current_position_as_origin').click(function(){
-    if(navigator.geolocation){
+  if(navigator.geolocation){
+    $('#set_current_position_as_origin').click(function(){
       navigator.geolocation.getCurrentPosition(
         function(position){
           $('#input_origin').val(position.coords.latitude + ',' + position.coords.longitude);
         },
         function(error){
           console.log(error);
-          $('#dialog').html('<span class="ui-icon ui-icon-alert"><\/span>Geolocation Failed').dialog('option',{
-            buttons: [{
-              text: 'OK',
-              click: function(e, ui){
-                $(this).dialog('close');
-                $(this).dialog('option', {buttons: []});
-              }
-            }]
-          });
         }
       );
-    }
-  });
+    });
+    $('#set_current_position_as_destination').click(function(){
+      navigator.geolocation.getCurrentPosition(
+        function(position){
+          $('#input_destination').val(position.coords.latitude + ',' + position.coords.longitude);
+        },
+        function(error){
+          console.log(error);
+        }
+      );
+    });
+  }else{
+    $('#set_current_position_as_origin').hide();
+    $('#set_current_position_as_destination').hide();
+  }
   
   $('#button_calc_route').button().attr('title', 'calculate route').click(function(event){
     calcRoute(directionsDisplay);
