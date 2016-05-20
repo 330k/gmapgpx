@@ -309,18 +309,12 @@ function initialize(){
         event.preventDefault();
         
         buf.push($('#input_origin').val());
-        /*for(i = 1; i <= 8; i++){
-          buf.push($('#input_waypoint_' + ('0' + i).slice(-2)).val());
-        }*/
         $('#waypoints input').each(function(){
           buf.push($(this).val());
         } 
         buf.push($('#input_destination').val());
         
         $('#input_origin').val(buf.pop());
-        /*for(i = 1; i <= 8; i++){
-          $('#input_waypoint_' + ('0' + i).slice(-2)).val(buf.pop());
-        }*/
         $('#waypoints input').each(function(){
           $(this).val(buf.pop());
         }
@@ -503,6 +497,7 @@ function updateSearchConditions(response){
       buf.push(route.legs[i].via_waypoints[j].toUrlValue());
     }
   }
+  console.log(route.legs);
   
   $('#waypoints input').each(function(){
     if(buf.length > 0){
