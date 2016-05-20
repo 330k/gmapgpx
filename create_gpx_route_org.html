@@ -47,6 +47,11 @@ body  { height: 100%; margin: 0; padding: 0; }
 #tab_search input[type="text"]  { width: 100%; }
 #tab_search input[type="submit"]  { width: 100%; }
 #tab_search select  { width: 100%; }
+#waypoints { list-style-type: none; margin: 0; padding: 0; width: 100%; }
+#waypoints li { }
+#waypoints li input[type="text"] { width: 100%; }
+/*#waypoints li span { position: absolute; right: 20px; width: 20px; }*/
+#tab_search span.ui-icon { position: absolute; right: 20px; width: 20px; }
 
 #gpx_download_link  { display: block; width: 100%; }
 #tab_gpx select  { width: 100%; }
@@ -71,20 +76,20 @@ button.ui-dialog-titlebar-close  { display: none; }
 <h3>Search</h3>
 <div id="tab_search">
  <form>
- Origin: <a id="set_origin_as_current_position">Get Current Position</a>
- <div><input id="input_origin" type="text" value="Tokyo Station" /></div>
- <div id="waypoints">Via:
-  <input id="input_waypoint_01" type="text" value="" />
-  <input id="input_waypoint_02" type="text" value="" />
-  <input id="input_waypoint_03" type="text" value="" />
-  <input id="input_waypoint_04" type="text" value="" />
-  <input id="input_waypoint_05" type="text" value="" />
-  <input id="input_waypoint_06" type="text" value="" />
-  <input id="input_waypoint_07" type="text" value="" />
-  <input id="input_waypoint_08" type="text" value="" />
- </div>
+ Origin:
+ <div><span id="set_current_position_as_origin" class="ui-icon ui-icon-pin-s"></span><input id="input_origin" type="text" value="Tokyo Station" /></div>
+ <ul id="waypoints">Via:
+  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_01" type="text" value="" /></li>
+  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_02" type="text" value="" /></li>
+  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_03" type="text" value="" /></li>
+  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_04" type="text" value="" /></li>
+  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_05" type="text" value="" /></li>
+  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_06" type="text" value="" /></li>
+  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_07" type="text" value="" /></li>
+  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_08" type="text" value="" /></li>
+ </ul>
  Destination:
- <div><input id="input_destination" type="text" value="Yokohama Station" /></div>
+ <div><span id="set_current_position_as_destination" class="ui-icon ui-icon-pin-s"></span><input id="input_destination" type="text" value="Yokohama Station" /></div>
  <div><label><input id="input_avoid_highways" type="checkbox" checked="checked" value=""/>Avoid Highways</label></div>
  <div><label><input id="input_avoid_tolls" type="checkbox" checked="checked" value=""/>Avoid Tolls</label></div>
  <div><label><input id="input_optimize_waypoints" type="checkbox" value=""/>Optimize waypoints</label></div>
@@ -209,6 +214,9 @@ function initialize(){
       localStorage.setItem('graph_panel_height', $('#graph_panel').height());
     }
   });
+  // Sortable
+  $('#waypoints').sortable().disableSelection();
+  
   // Dialog
   $('<div id="dialog"><\/div>').dialog({
     modal: true,
@@ -329,23 +337,26 @@ function initialize(){
   });
 
   // Button Events
-  $('#set_origin_as_current_position').button().click(function(){
-    try{
-      if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(
-          function(position){
-            $('#input_origin').val(position.coords.latitude + ',' + position.coords.longitude);
-          },
-          function(error){
-            console.log(error);
-            throw new Error();
-          }
+  $('#set_current_position_as_origin').click(function(){
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(
+        function(position){
+          $('#input_origin').val(position.coords.latitude + ',' + position.coords.longitude);
+        },
+        function(error){
+          $('#dialog').html('<span class="ui-icon ui-icon-alert"><\/span>Geolocation Failed').dialog('option',{
+            buttons: [{
+              text: 'OK',
+              click: function(e, ui){
+                $(this).dialog('close');
+                $(this).dialog('option', {buttons: []});
+              }
+            }]
+          })
         );
-      }else{
-        throw(new Error());
-      }
-    }catch(e){
-      $('#dialog').html('<span class="ui-icon ui-icon-alert"><\/span>Failed to Get Current Position').dialog('option',{
+      );
+    }else{
+      $('#dialog').html('<span class="ui-icon ui-icon-alert"><\/span>Geolocation Not Supported').dialog('option',{
         buttons: [{
           text: 'OK',
           click: function(e, ui){
@@ -353,7 +364,7 @@ function initialize(){
             $(this).dialog('option', {buttons: []});
           }
         }]
-      })
+      });
     }
   });
   
