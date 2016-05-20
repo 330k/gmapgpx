@@ -410,15 +410,14 @@ function calcRoute(directionsDisplay) {
       });
     }
   }*/
-  var ids = $(this).sortable('toArray');
-  for(var i = 0; i < ids.length; i++){
-    if($('#' + ids[i].replace('li_', 'input_')).val()){
+  $('#waypoints input').each(function(){
+    if($(this).val()){
       waypoints.push({
-        location: $('#' + ids[i].replace('li_', 'input_')).val(),
+        location: $(this).val(),
         stopover: $('#input_optimize_waypoints').prop('checked')
       });
     }
-  }
+  });
   var request = {
     origin: $('#input_origin').val(),
     destination: $('#input_destination').val(),
@@ -500,21 +499,24 @@ function updateSearchConditions(response){
   //$('#input_origin').val(route.legs[0].start_address);
   //$('#input_destination').val(route.legs[route.legs.length - 1].end_address);
   
-  $('#waypoints').sortable('refreshPositions');
-  var c = 1;
-  var i = 0;
-  
-  for(i = 0; i < route.legs.length; i++){
+  var buf = [];
+  for(var i = 0; i < route.legs.length; i++){
     for(var j = 0; j < route.legs[i].via_waypoints.length; j++){
-      $('#input_waypoint_' + ('0' + c).slice(-2)).val(
-        route.legs[i].via_waypoints[j].toUrlValue()
-      );
-      c++;
+      buf.push(route.legs[i].via_waypoints[j].toUrlValue());
     }
-  }
+  }/*
   for(i = c; i <= 8; i++){
     $('#input_waypoint_' + ('0' + i).slice(-2)).val('');
-  }
+  }*/
+  
+  $('#waypoints input').each(function(){
+    var b = buf.shift();
+    if(typeof b === 'undefined'){
+      $(this).val(b);
+    }else{
+      $(this).val('');
+    }
+  });
 }
 
 function createGPXDownloadLink(){
