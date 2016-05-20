@@ -44,11 +44,11 @@ body  { height: 100%; margin: 0; padding: 0; }
 #side_panel  { position: absolute; left: 0px; top: 0px; width: 30%; min-width: 200px; height: 100%; overflow: hidden; }
 #accordion  { font-size: 80%; }
 
-#tab_search input[type="text"]  { width: 100%; }
-#tab_search input[type="submit"]  { width: 100%; }
+#tab_search input[type="text"]  { width: 100%; padding-left: 16px; }
+#tab_search input[type="submit"]  { width: 100%; padding-left: 16px; }
 #tab_search select  { width: 100%; }
 #waypoints { list-style-type: none; margin: 0; padding: 0; width: 100%; }
-#tab_search span.ui-icon { position: absolute; right: 20px; width: 20px; }
+#tab_search span.ui-icon { position: absolute; width: 16px; margin: auto 0 auto 0; }
 
 #gpx_download_link  { display: block; width: 100%; }
 #tab_gpx select  { width: 100%; }
@@ -76,14 +76,14 @@ button.ui-dialog-titlebar-close  { display: none; }
  Origin:
  <div><span id="set_current_position_as_origin" class="ui-icon ui-icon-pin-s"></span><input id="input_origin" type="text" value="Tokyo Station" /></div>
  <ul id="waypoints">Via:
-  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_01" type="text" value="" /></li>
-  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_02" type="text" value="" /></li>
-  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_03" type="text" value="" /></li>
-  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_04" type="text" value="" /></li>
-  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_05" type="text" value="" /></li>
-  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_06" type="text" value="" /></li>
-  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_07" type="text" value="" /></li>
-  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_08" type="text" value="" /></li>
+  <li id="li_waypoint_01"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_01" type="text" value="" /></li>
+  <li id="li_waypoint_02"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_02" type="text" value="" /></li>
+  <li id="li_waypoint_03"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_03" type="text" value="" /></li>
+  <li id="li_waypoint_04"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_04" type="text" value="" /></li>
+  <li id="li_waypoint_05"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_05" type="text" value="" /></li>
+  <li id="li_waypoint_06"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_06" type="text" value="" /></li>
+  <li id="li_waypoint_07"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_07" type="text" value="" /></li>
+  <li id="li_waypoint_08"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_08" type="text" value="" /></li>
  </ul>
  Destination:
  <div><span id="set_current_position_as_destination" class="ui-icon ui-icon-pin-s"></span><input id="input_destination" type="text" value="Yokohama Station" /></div>
@@ -212,7 +212,11 @@ function initialize(){
     }
   });
   // Sortable
-  $('#waypoints').sortable().disableSelection();
+  $('#waypoints').sortable({
+    update: function(event, ui){
+      
+    }
+  }).disableSelection();
   
   // Dialog
   $('<div id="dialog"><\/div>').dialog({
@@ -398,10 +402,19 @@ function initialize(){
 function calcRoute(directionsDisplay) {
   'use strict';
   var waypoints = [];
-  for(var i = 1; i <= 8; i++){
+  /*for(var i = 1; i <= 8; i++){
     if($('#input_waypoint_' + ('0' + i).slice(-2)).val()){
       waypoints.push({
         location: $('#input_waypoint_' + ('0' + i).slice(-2)).val(),
+        stopover: $('#input_optimize_waypoints').prop('checked')
+      });
+    }
+  }*/
+  var ids = $(this).sortable('toArray');
+  for(var i = 0; i < ids.length; i++){
+    if($('#' + ids[i].replace('li_', 'input_')).val()){
+      waypoints.push({
+        location: $('#' + ids[i].replace('li_', 'input_')).val(),
         stopover: $('#input_optimize_waypoints').prop('checked')
       });
     }
@@ -486,6 +499,8 @@ function updateSearchConditions(response){
   $('#input_destination').val(route.legs[route.legs.length - 1].end_location.toUrlValue());
   //$('#input_origin').val(route.legs[0].start_address);
   //$('#input_destination').val(route.legs[route.legs.length - 1].end_address);
+  
+  $('#waypoints').sortable('refreshPosition');
   var c = 1;
   var i = 0;
   
