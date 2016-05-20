@@ -500,7 +500,7 @@ function updateSearchConditions(response){
   
   $('#waypoints input').each(function(){
     if(buf.length > 0){
-      $(this).val(b.shift());
+      $(this).val(buf.shift());
     }else{
       $(this).val('');
     }
