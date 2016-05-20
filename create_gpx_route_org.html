@@ -496,8 +496,9 @@ function updateSearchConditions(response){
     for(var j = 0; j < route.legs[i].via_waypoints.length; j++){
       buf.push(route.legs[i].via_waypoints[j].toUrlValue());
     }
+    buf.push(route.legs[i].end_location.toUrlValue());
   }
-  console.log(route.legs);
+  buf.pop();
   
   $('#waypoints input').each(function(){
     if(buf.length > 0){
