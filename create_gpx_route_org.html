@@ -334,7 +334,7 @@ function initialize(){
       if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(
           function(position){
-            $('#input_origin').val(position.coord.latitude + ',' + position.coord.longitude);
+            $('#input_origin').val(position.coords.latitude + ',' + position.coords.longitude);
           },
           function(error){
             console.log(error);
@@ -425,7 +425,7 @@ function calcRoute(directionsDisplay) {
       directionsDisplay.setDirections(response);
       $('#dialog').dialog('close');
     } else {
-      $('#dialog').html('<span class="ui-icon ui-icon-alert"><\/span>ルートが見つかりませんでした').dialog('option',{
+      $('#dialog').html('<span class="ui-icon ui-icon-alert"><\/span>Route Not Found').dialog('option',{
         buttons: [{
           text: 'OK',
           click: function(e, ui){
