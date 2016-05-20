@@ -178,6 +178,7 @@ var gpxdata = {
   trksegs: [[]]
 };
 
+// 初期化(Google Maps API読み込み後に実行)
 function initialize(){
   'use strict';
   
@@ -406,6 +407,7 @@ function initialize(){
   createGPXDownloadLink();
 }
 
+// Google Maps APIでルートを検索
 function calcRoute(directionsDisplay) {
   'use strict';
   var waypoints = [];
@@ -448,6 +450,7 @@ function calcRoute(directionsDisplay) {
   });
 }
 
+// GoogleからのレスポンスからGPXを生成
 function createGPXFromDirections(response){
   'use strict';
   var route = response.routes[0];
@@ -489,6 +492,7 @@ function createGPXFromDirections(response){
   createGPXDownloadLink();
 }
 
+// ルート検索条件を更新
 function updateSearchConditions(response){
   'use strict';
   var route = response.routes[0];
@@ -516,6 +520,7 @@ function updateSearchConditions(response){
   });
 }
 
+// GPXダウンロードリンクを生成
 function createGPXDownloadLink(){
   'use strict';
   try{
@@ -591,8 +596,7 @@ function createGPXDownloadLink(){
     }, 0);
     
   }catch(err){
-    //alert('ブラウザが対応していません');
-    alert(err);
+    console.log(err);
   }
 }
 
@@ -613,6 +617,7 @@ function escapeXMLString(str){
   return result;
 }
 
+// 距離を計算
 var calcDistance = (function(){
   'use strict';
   
@@ -692,6 +697,7 @@ var calcDistance = (function(){
   };
 })();
 
+// 標高データを追加
 var addElevationToGPX = (function(){
   'use strict';
   var UNIT = 100;
@@ -805,6 +811,7 @@ var addElevationToGPX = (function(){
   };
 })();
 
+// ポイントを間引く
 var simplifyGPX = (function(){
   'use strict';
   
@@ -986,6 +993,7 @@ var simplifyGPX = (function(){
   };
 })();
 
+// グラフデータを生成
 var createGraphData = (function(){
   'use strict';
   var marker = null;
@@ -1082,6 +1090,7 @@ var createGraphData = (function(){
   };
 })();
 
+// 簡略化した線を描画(PC版のみ)
 var drawSimplifiedLine = (function(){
   'use strict';
   var linePath = null;
