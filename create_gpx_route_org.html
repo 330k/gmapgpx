@@ -71,7 +71,7 @@ button.ui-dialog-titlebar-close  { display: none; }
 <h3>Search</h3>
 <div id="tab_search">
  <form>
- Origin: 
+ Origin: <a id="set_origin_as_current_position">Get Current Position</a>
  <div><input id="input_origin" type="text" value="Tokyo Station" /></div>
  <div id="waypoints">Via:
   <input id="input_waypoint_01" type="text" value="" />
@@ -329,6 +329,34 @@ function initialize(){
   });
 
   // Button Events
+  $('#set_origin_as_current_position').button().click(function(){
+    try{
+      if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(
+          function(position){
+            $('#input_origin').val(position.coord.latitude + ',' + position.coord.longitude);
+          },
+          function(error){
+            console.log(error);
+            throw new Error();
+          }
+        );
+      }else{
+        throw(new Error());
+      }
+    }catch(e){
+      $('#dialog').html('<span class="ui-icon ui-icon-alert"><\/span>Failed to Get Current Position').dialog('option',{
+        buttons: [{
+          text: 'OK',
+          click: function(e, ui){
+            $(this).dialog('close');
+            $(this).dialog('option', {buttons: []});
+          }
+        }]
+      })
+    }
+  });
+  
   $('#button_calc_route').button().attr('title', 'calculate route').click(function(event){
     calcRoute(directionsDisplay);
     event.preventDefault();
