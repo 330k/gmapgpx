@@ -44,11 +44,13 @@ body  { height: 100%; margin: 0; padding: 0; }
 #side_panel  { position: absolute; left: 0px; top: 0px; width: 30%; min-width: 200px; height: 100%; overflow: hidden; }
 #accordion  { font-size: 80%; }
 
+#tab_search div { position: relative; }
 #tab_search input[type="text"]  { width: 100%; padding-left: 16px; }
 #tab_search input[type="submit"]  { width: 100%; padding-left: 16px; }
 #tab_search select  { width: 100%; }
 #waypoints { list-style-type: none; margin: 0; padding: 0; width: 100%; }
 #waypoints li { position: relative; }
+#waypoints li input[type="text"] { z-index: 9999; }
 #tab_search span.ui-icon { position: absolute; width: 16px; margin: auto 0 auto 0; }
 
 #gpx_download_link  { display: block; width: 100%; }
