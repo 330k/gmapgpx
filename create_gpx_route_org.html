@@ -298,7 +298,7 @@ function initialize(){
         event.preventDefault();
         $('#waypoints input').each(function(){
           $(this).val('');
-        }
+        });
         $('#rmenu').hide();
         if(typeof gpxdata.trksegs[0][0] !== 'undefined'){
           calcRoute(directionsDisplay);
@@ -311,13 +311,13 @@ function initialize(){
         buf.push($('#input_origin').val());
         $('#waypoints input').each(function(){
           buf.push($(this).val());
-        } 
+        });
         buf.push($('#input_destination').val());
         
         $('#input_origin').val(buf.pop());
         $('#waypoints input').each(function(){
           $(this).val(buf.pop());
-        }
+        });
         $('#input_destination').val(buf.pop());
 
         $('#rmenu').hide();
