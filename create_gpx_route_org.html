@@ -76,14 +76,14 @@ button.ui-dialog-titlebar-close  { display: none; }
  Origin:
  <div><span id="set_current_position_as_origin" class="ui-icon ui-icon-pin-s"></span><input id="input_origin" type="text" value="Tokyo Station" /></div>
  <ul id="waypoints">Via:
-  <li id="li_waypoint_01"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_01" type="text" value="" /></li>
-  <li id="li_waypoint_02"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_02" type="text" value="" /></li>
-  <li id="li_waypoint_03"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_03" type="text" value="" /></li>
-  <li id="li_waypoint_04"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_04" type="text" value="" /></li>
-  <li id="li_waypoint_05"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_05" type="text" value="" /></li>
-  <li id="li_waypoint_06"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_06" type="text" value="" /></li>
-  <li id="li_waypoint_07"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_07" type="text" value="" /></li>
-  <li id="li_waypoint_08"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_08" type="text" value="" /></li>
+  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_01" type="text" value="" /></li>
+  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_02" type="text" value="" /></li>
+  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_03" type="text" value="" /></li>
+  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_04" type="text" value="" /></li>
+  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_05" type="text" value="" /></li>
+  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_06" type="text" value="" /></li>
+  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_07" type="text" value="" /></li>
+  <li><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input id="input_waypoint_08" type="text" value="" /></li>
  </ul>
  Destination:
  <div><span id="set_current_position_as_destination" class="ui-icon ui-icon-pin-s"></span><input id="input_destination" type="text" value="Yokohama Station" /></div>
@@ -296,8 +296,8 @@ function initialize(){
       });
       $('#rmenu_clear_waypoints').off('click').click(function(event){
         event.preventDefault();
-        for(var i = 1; i <= 8; i++){
-          $('#input_waypoint_' + ('0' + i).slice(-2)).val('');
+        $('#waypoints input').each(function(){
+          $(this).val('');
         }
         $('#rmenu').hide();
         if(typeof gpxdata.trksegs[0][0] !== 'undefined'){
@@ -309,14 +309,20 @@ function initialize(){
         event.preventDefault();
         
         buf.push($('#input_origin').val());
-        for(i = 1; i <= 8; i++){
+        /*for(i = 1; i <= 8; i++){
           buf.push($('#input_waypoint_' + ('0' + i).slice(-2)).val());
-        }
+        }*/
+        $('#waypoints input').each(function(){
+          buf.push($(this).val());
+        } 
         buf.push($('#input_destination').val());
         
         $('#input_origin').val(buf.pop());
-        for(i = 1; i <= 8; i++){
+        /*for(i = 1; i <= 8; i++){
           $('#input_waypoint_' + ('0' + i).slice(-2)).val(buf.pop());
+        }*/
+        $('#waypoints input').each(function(){
+          $(this).val(buf.pop());
         }
         $('#input_destination').val(buf.pop());
 
