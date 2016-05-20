@@ -402,16 +402,8 @@ function initialize(){
 function calcRoute(directionsDisplay) {
   'use strict';
   var waypoints = [];
-  /*for(var i = 1; i <= 8; i++){
-    if($('#input_waypoint_' + ('0' + i).slice(-2)).val()){
-      waypoints.push({
-        location: $('#input_waypoint_' + ('0' + i).slice(-2)).val(),
-        stopover: $('#input_optimize_waypoints').prop('checked')
-      });
-    }
-  }*/
   $('#waypoints input').each(function(){
-    if($(this).val()){
+    if($(this).val() !== ''){
       waypoints.push({
         location: $(this).val(),
         stopover: $('#input_optimize_waypoints').prop('checked')
@@ -504,15 +496,11 @@ function updateSearchConditions(response){
     for(var j = 0; j < route.legs[i].via_waypoints.length; j++){
       buf.push(route.legs[i].via_waypoints[j].toUrlValue());
     }
-  }/*
-  for(i = c; i <= 8; i++){
-    $('#input_waypoint_' + ('0' + i).slice(-2)).val('');
-  }*/
+  }
   
   $('#waypoints input').each(function(){
-    var b = buf.shift();
-    if(typeof b === 'undefined'){
-      $(this).val(b);
+    if(buf.length > 0){
+      $(this).val(b.shift());
     }else{
       $(this).val('');
     }
