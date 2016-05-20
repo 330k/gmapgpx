@@ -48,9 +48,6 @@ body  { height: 100%; margin: 0; padding: 0; }
 #tab_search input[type="submit"]  { width: 100%; }
 #tab_search select  { width: 100%; }
 #waypoints { list-style-type: none; margin: 0; padding: 0; width: 100%; }
-#waypoints li { }
-#waypoints li input[type="text"] { width: 100%; }
-/*#waypoints li span { position: absolute; right: 20px; width: 20px; }*/
 #tab_search span.ui-icon { position: absolute; right: 20px; width: 20px; }
 
 #gpx_download_link  { display: block; width: 100%; }
@@ -344,6 +341,7 @@ function initialize(){
           $('#input_origin').val(position.coords.latitude + ',' + position.coords.longitude);
         },
         function(error){
+          console.log(error);
           $('#dialog').html('<span class="ui-icon ui-icon-alert"><\/span>Geolocation Failed').dialog('option',{
             buttons: [{
               text: 'OK',
@@ -355,16 +353,6 @@ function initialize(){
           });
         }
       );
-    }else{
-      $('#dialog').html('<span class="ui-icon ui-icon-alert"><\/span>Geolocation Not Supported').dialog('option',{
-        buttons: [{
-          text: 'OK',
-          click: function(e, ui){
-            $(this).dialog('close');
-            $(this).dialog('option', {buttons: []});
-          }
-        }]
-      });
     }
   });
   
