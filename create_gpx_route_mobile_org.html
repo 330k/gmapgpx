@@ -266,6 +266,7 @@ function initialize(){
     $('#waypoints input').each(function(){
       $(this).val('');
     });
+    return false;
   });
   $('#button_calc_route').attr('title', 'calculate route').click(function(event){
     calcRoute();
