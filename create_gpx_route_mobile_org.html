@@ -307,14 +307,6 @@ function initialize(){
 function calcRoute() {
   'use strict';
   var waypoints = [];
-  /*for(var i = 1; i <= 8; i++){
-    if($('#input_waypoint_' + ('0' + i).slice(-2)).val()){
-      waypoints.push({
-        location: $('#input_waypoint_' + ('0' + i).slice(-2)).val(),
-        stopover: $('#input_optimize_waypoints').prop('checked')
-      });
-    }
-  }*/
   $('#waypoints input').each(function(){
     if($(this).val() !== ''){
       waypoints.push({
