@@ -168,6 +168,10 @@ var gpxdata = {
 };
 var directionsDisplay = null;
 
+// HTTPはHTTPSへリダイレクト
+if(location.protocol == 'http:') {
+  location.replace(location.href.replace(/http:/, 'https:'));
+}
 navigator.standalone = navigator.standalone || (screen.height-document.documentElement.clientHeight<40);
 
 function initialize(){

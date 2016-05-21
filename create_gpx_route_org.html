@@ -178,6 +178,11 @@ var gpxdata = {
   trksegs: [[]]
 };
 
+// HTTPはHTTPSへリダイレクト
+if(location.protocol == 'http:') {
+  location.replace(location.href.replace(/http:/, 'https:'));
+}
+
 // 初期化(Google Maps API読み込み後に実行)
 function initialize(){
   'use strict';
