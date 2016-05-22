@@ -63,8 +63,8 @@ body  { height: 100%; margin: 0; padding: 0; user-select: none;}
 <div id="page_search" data-role="page" data-pagename="Search">
  <div role="main" class="ui-content">
  <form>
- Origin:
- <div><span id="set_current_position_as_destination" class="ui-icon ui-icon-location" title="Input current position from Geolocation API (Edge, Firefox)"></span><input id="input_origin" type="text" value="Tokyo Station" /></div>
+ Origin: <span id="set_current_position_as_origin" class="ui-btn ui-icon-location"></span>
+ <div><input id="input_origin" type="text" value="Tokyo Station" /></div>
  <div id="waypoints" data-role="collapsible">
  <h3>Via:</h3>
   <div id="waypoints">
@@ -79,7 +79,7 @@ body  { height: 100%; margin: 0; padding: 0; user-select: none;}
    <button id="button_clear_waypoints">Clear Waypoints</button>
   </div>
  </div>
- Destination:
+ Destination: <span id="set_current_position_as_destination" class="ui-btn ui-icon-location"></span>
  <div><input id="input_destination" type="text" value="Yokohama Station" /></div>
  <div><label><input id="input_avoid_highways" type="checkbox" checked="checked" value=""/>Avoid Highways</label></div>
  <div><label><input id="input_avoid_tolls" type="checkbox" checked="checked" value=""/>Avoid Tolls</label></div>
@@ -269,6 +269,31 @@ function initialize(){
   });
   
   // Button Events
+  if(navigator.geolocation){
+    $('#set_current_position_as_origin').click(function(){
+      navigator.geolocation.getCurrentPosition(
+        function(position){
+          $('#input_origin').val(position.coords.latitude + ',' + position.coords.longitude);
+        },
+        function(error){
+          console.log(error);
+        }
+      );
+    });
+    $('#set_current_position_as_destination').click(function(){
+      navigator.geolocation.getCurrentPosition(
+        function(position){
+          $('#input_destination').val(position.coords.latitude + ',' + position.coords.longitude);
+        },
+        function(error){
+          console.log(error);
+        }
+      );
+    });
+  }else{
+    $('#set_current_position_as_origin').hide();
+    $('#set_current_position_as_destination').hide();
+  }
   $('#button_clear_waypoints').attr('title', 'Clear Waypoints').click(function(event){
     $('#waypoints input').each(function(){
       $(this).val('');
