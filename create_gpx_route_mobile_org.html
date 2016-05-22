@@ -276,6 +276,7 @@ function initialize(){
           console.log(error);
         }
       );
+      return false;
     });
     $('#set_current_position_as_destination').click(function(){
       navigator.geolocation.getCurrentPosition(
@@ -286,6 +287,7 @@ function initialize(){
           console.log(error);
         }
       );
+      return false;
     });
   }else{
     $('#set_current_position_as_origin').hide();
