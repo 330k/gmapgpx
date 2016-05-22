@@ -40,6 +40,9 @@ body  { height: 100%; margin: 0; padding: 0; user-select: none;}
 #map_canvas  { position: absolute; left: 0px; top: 0px; width: 100%; height: 80%; }
 #graph_canvas  { position: absolute; left: 0px; top: 80%; width: 100%; height: 20%; overflow: hidden; padding: 1px; }
 
+#page_search div { position: relative; }
+#page_search span.ui-icon { position: absolute; right: 0px; top: 0px; bottom: 0px; width: 16px; height: 16px; margin: auto;}
+
 #gpx_text  { display: none; }
 </style>
 </head>
@@ -61,7 +64,7 @@ body  { height: 100%; margin: 0; padding: 0; user-select: none;}
  <div role="main" class="ui-content">
  <form>
  Origin:
- <div><input id="input_origin" type="text" value="Tokyo Station" /></div>
+ <div><span id="set_current_position_as_destination" class="ui-icon ui-icon-pin-s" title="Input current position from Geolocation API (Edge, Firefox)"></span><input id="input_origin" type="text" value="Tokyo Station" /></div>
  <div id="waypoints" data-role="collapsible">
  <h3>Via:</h3>
   <div id="waypoints">
