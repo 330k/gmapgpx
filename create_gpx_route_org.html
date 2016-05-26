@@ -223,9 +223,9 @@ function initialize(){
   $('#map_canvas').resize(function(){
     google.maps.event.trigger(map, 'resize');
   });
-  /*$(window).resize(function(){
+  $(window).resize(function(){
     google.maps.event.trigger(map, 'resize');
-  });*/
+  });
   // Sortable
   $('#waypoints').sortable({
   }).disableSelection();
