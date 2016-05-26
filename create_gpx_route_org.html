@@ -186,7 +186,7 @@ if(location.protocol == 'http:') {
 // 初期化(Google Maps API読み込み後に実行)
 function initialize(){
   'use strict';
-  $(function(){
+  $(window).ready(function(){
     // Side Panel
     $('#accordion').accordion({
       heightStyle: 'fill',
