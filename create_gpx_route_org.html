@@ -222,7 +222,7 @@ function initialize(){
     if(typeof localStorage !== 'undefined'){
       localStorage.setItem('graph_panel_height', $('#graph_panel').height());
     }
-  }).resize();
+  });
   // Sortable
   $('#waypoints').sortable({
   }).disableSelection();
