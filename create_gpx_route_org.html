@@ -209,12 +209,12 @@ function initialize(){
     resize: function(event, ui){
       $('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
       $('#graph_panel').resize();
+      $('#map_canvas').resize();
+      if(typeof localStorage !== 'undefined'){
+        localStorage.setItem('side_panel_width', $('#side_panel').width());
+      }
     }
-  }).resize(function(){
-    if(typeof localStorage !== 'undefined'){
-      localStorage.setItem('side_panel_width', $('#side_panel').width());
-    }
-  }).resize();
+  });
   $('#graph_panel').resizable({
     handles: 'n',
     resize: function(event, ui){
@@ -222,6 +222,7 @@ function initialize(){
     }
   }).resize(function(){
     $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), $('#graph_panel').innerHeight());
+    $('#map_canvas').resize();
     if(typeof localStorage !== 'undefined'){
       localStorage.setItem('graph_panel_height', $('#graph_panel').height());
     }
