@@ -198,8 +198,6 @@ function initialize(){
     }
   });
   // Resizable
-  console.log($('#side_panel').width());
-  console.log($('#map_canvas').width());
   $('#map_canvas').resize(function(){
     console.log('#map_canvas resize');
     google.maps.event.trigger(map, 'resize');
@@ -260,7 +258,7 @@ function initialize(){
     }
   });
   
-  $(window).load(function(){
+  setTimeout(function(){
     // Google Maps Initialize
     map = new google.maps.Map(document.getElementById('map_canvas'), {
       zoom: 6,
@@ -417,7 +415,7 @@ function initialize(){
     });
 
     createGPXDownloadLink();
-  });
+  }, 10);
 }
 
 // Google Maps APIでルートを検索
