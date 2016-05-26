@@ -198,6 +198,8 @@ function initialize(){
     }
   });
   // Resizable
+  console.log($('#side_panel').width());
+  console.log($('#map_canvas').width());
   $('#map_canvas').resize(function(){
     google.maps.event.trigger(map, 'resize');
   });
