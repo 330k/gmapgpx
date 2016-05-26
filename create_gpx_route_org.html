@@ -186,74 +186,74 @@ if(location.protocol == 'http:') {
 // 初期化(Google Maps API読み込み後に実行)
 function initialize(){
   'use strict';
-  $(window).ready(function(){
-    // Side Panel
-    $('#accordion').accordion({
-      heightStyle: 'fill',
-      animate: false,
-      activate:  function(event, ui){
-        $('#gpx_text').height(
-          $('#tab_gpx').innerHeight() - $('#tab_gpx_001').outerHeight() - $('#tab_gpx_001').position().top
-        );
-      }
-    });
-    // Resizable
-    $('#side_panel').resizable({
-      handles: 'e',
-      resize: function(event, ui){
-        $('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
-        $('#graph_panel').resize();
-      }
-    }).resize(function(){
-      if(typeof localStorage !== 'undefined'){
-        localStorage.setItem('side_panel_width', $('#side_panel').width());
-      }
-    });
-    $('#graph_panel').resizable({
-      handles: 'n',
-      resize: function(event, ui){
-        $('#map_canvas').height($('#center_panel').innerHeight() - $('#graph_panel').height());
-      }
-    }).resize(function(){
-      $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), $('#graph_panel').innerHeight());
-      if(typeof localStorage !== 'undefined'){
-        localStorage.setItem('graph_panel_height', $('#graph_panel').height());
-      }
-    });
-    // Sortable
-    $('#waypoints').sortable({
-    }).disableSelection();
-    $('#waypoints input').bind('click.sortable mousedown.sortable',function(e){
-      e.target.focus();
-    }); // Fix for Firefox
-    
-    // Dialog
-    $('<div id="dialog"><\/div>').dialog({
-      modal: true,
-      closeOnEscape: false,
-      autoOpen: false,
-      draggable: false,
-      resizable: false
-    });
+  
+  // Side Panel
+  $('#accordion').accordion({
+    heightStyle: 'fill',
+    animate: false,
+    activate:  function(event, ui){
+      $('#gpx_text').height(
+        $('#tab_gpx').innerHeight() - $('#tab_gpx_001').outerHeight() - $('#tab_gpx_001').position().top
+      );
+    }
+  });
+  // Resizable
+  $('#side_panel').resizable({
+    handles: 'e',
+    resize: function(event, ui){
+      $('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
+      $('#graph_panel').resize();
+    }
+  }).resize(function(){
+    if(typeof localStorage !== 'undefined'){
+      localStorage.setItem('side_panel_width', $('#side_panel').width());
+    }
+  });
+  $('#graph_panel').resizable({
+    handles: 'n',
+    resize: function(event, ui){
+      $('#map_canvas').height($('#center_panel').innerHeight() - $('#graph_panel').height());
+    }
+  }).resize(function(){
+    $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), $('#graph_panel').innerHeight());
+    if(typeof localStorage !== 'undefined'){
+      localStorage.setItem('graph_panel_height', $('#graph_panel').height());
+    }
+  });
+  // Sortable
+  $('#waypoints').sortable({
+  }).disableSelection();
+  $('#waypoints input').bind('click.sortable mousedown.sortable',function(e){
+    e.target.focus();
+  }); // Fix for Firefox
+  
+  // Dialog
+  $('<div id="dialog"><\/div>').dialog({
+    modal: true,
+    closeOnEscape: false,
+    autoOpen: false,
+    draggable: false,
+    resizable: false
+  });
 
-    // Input Check
-    var geocodingService = new google.maps.Geocoder();
-    $('#tab_search input[type="text"]').blur(function(){
-      var $input = $(this);
-      if($input.val() !== ''){
-        geocodingService.geocode({'address': $input.val()}, function(results, status) {
-          if(status === google.maps.GeocoderStatus.OK){
-            $input.removeClass('ui-state-error');
-          }else{
-            $input.addClass('ui-state-error');
-          }
-        });
-      }else{
-        $input.removeClass('ui-state-error');
-      }
-    });
-
-    
+  // Input Check
+  var geocodingService = new google.maps.Geocoder();
+  $('#tab_search input[type="text"]').blur(function(){
+    var $input = $(this);
+    if($input.val() !== ''){
+      geocodingService.geocode({'address': $input.val()}, function(results, status) {
+        if(status === google.maps.GeocoderStatus.OK){
+          $input.removeClass('ui-state-error');
+        }else{
+          $input.addClass('ui-state-error');
+        }
+      });
+    }else{
+      $input.removeClass('ui-state-error');
+    }
+  });
+  
+  $(window).load(function(){
     // Google Maps Initialize
     map = new google.maps.Map(document.getElementById('map_canvas'), {
       zoom: 6,
