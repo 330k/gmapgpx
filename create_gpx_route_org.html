@@ -223,9 +223,6 @@ function initialize(){
   $('#map_canvas').resize(function(){
     google.maps.event.trigger(map, 'resize');
   });
-  $(window).resize(function(){
-    google.maps.event.trigger(map, 'resize');
-  });
   // Sortable
   $('#waypoints').sortable({
   }).disableSelection();
@@ -415,6 +412,7 @@ function initialize(){
       $('#gpx_download_link').attr('download', $(this).val());
     });
 
+    $(window).resize();
     createGPXDownloadLink();
   });
 }
