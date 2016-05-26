@@ -198,6 +198,9 @@ function initialize(){
     }
   });
   // Resizable
+  $('#map_canvas').resize(function(){
+    google.maps.event.trigger(map, 'resize');
+  });
   $('#side_panel').resizable({
     handles: 'e',
     resize: function(event, ui){
@@ -208,7 +211,7 @@ function initialize(){
     if(typeof localStorage !== 'undefined'){
       localStorage.setItem('side_panel_width', $('#side_panel').width());
     }
-  });
+  }).resize();
   $('#graph_panel').resizable({
     handles: 'n',
     resize: function(event, ui){
@@ -219,10 +222,7 @@ function initialize(){
     if(typeof localStorage !== 'undefined'){
       localStorage.setItem('graph_panel_height', $('#graph_panel').height());
     }
-  });
-  $('#map_canvas').resize(function(){
-    google.maps.event.trigger(map, 'resize');
-  });
+  }).resize();
   // Sortable
   $('#waypoints').sortable({
   }).disableSelection();
@@ -412,7 +412,6 @@ function initialize(){
       $('#gpx_download_link').attr('download', $(this).val());
     });
 
-    $(window).resize();
     createGPXDownloadLink();
   });
 }
