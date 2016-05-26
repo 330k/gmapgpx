@@ -220,6 +220,12 @@ function initialize(){
       localStorage.setItem('graph_panel_height', $('#graph_panel').height());
     }
   });
+  $('#map_canvas').resize(function(){
+    google.maps.event.trigger(map, 'resize');
+  });
+  /*$(window).resize(function(){
+    google.maps.event.trigger(map, 'resize');
+  });*/
   // Sortable
   $('#waypoints').sortable({
   }).disableSelection();
