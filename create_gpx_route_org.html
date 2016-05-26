@@ -199,9 +199,17 @@ function initialize(){
   });
   
   // Resizable
-  $('#map_canvas').resize(function(){
-    google.maps.event.trigger(map, 'resize');
-  });
+  (function(){
+    var timer = false;
+    $('#map_canvas').resize(function() {
+      if (timer !== false) {
+        clearTimeout(timer);
+      }
+      timer = setTimeout(function() {
+        google.maps.event.trigger(map, 'resize');
+      }, 200);
+    });
+  })();
   $('#side_panel').resizable({
     handles: 'e',
     resize: function(event, ui){
