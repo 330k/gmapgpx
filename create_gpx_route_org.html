@@ -201,6 +201,7 @@ function initialize(){
   console.log($('#side_panel').width());
   console.log($('#map_canvas').width());
   $('#map_canvas').resize(function(){
+    console.log('#map_canvas resize');
     google.maps.event.trigger(map, 'resize');
   });
   $('#side_panel').resizable({
