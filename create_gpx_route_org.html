@@ -34,8 +34,8 @@
 <link rel="manifest" href="manifest.json" />
 
 <style type="text/css">
-html  { height: 100%; }
-body  { height: 100%; margin: 0; padding: 0; }
+html  { width: 100%; height: 100%; }
+body  { width: 100%; height: 100%; margin: 0; padding: 0; }
 
 #center_panel  { position: absolute; right: 0px; top: 0px; width: 70%; height: 100%;}
 #map_canvas  { position: absolute; right: 0px; top: 0px; width: 100%; height: 80%;}
@@ -239,6 +239,9 @@ function initialize(){
     }
   });
   $('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
+  $(window).resize(function(){
+    $('#side_panel').resize();
+  });
   
   // Sortable
   $('#waypoints').sortable({
