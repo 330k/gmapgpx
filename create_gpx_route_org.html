@@ -215,7 +215,7 @@ function initialize(){
     handles: 'e',
     resize: function(event, ui){
       //$('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
-      $('#center_panel').css({'margin-left': $('#side_panel').width(), 'padding-left': -$('#side_panel').width()});
+      $('#center_panel').css({'margin-left': $('#side_panel').width(), 'padding-left': -$('#side_panel').width(), 'width': '100%'});
     }
   }).resize(function(){
     $('#graph_panel').resize();
