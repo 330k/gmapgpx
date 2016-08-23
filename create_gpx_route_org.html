@@ -36,7 +36,7 @@
 html  { width: 100%; height: 100%; }
 body  { width: 100%; height: 100%; margin: 0; padding: 0; }
 
-#center_panel  { float: right;　position: absolute; left: 0px; top: 0px; padding-left: 30%; width: 100%; height: 100%;}
+#center_panel  { position: absolute; left: 0px; top: 0px; margin-left: 30%; width: 70%; height: 100%;}
 #map_canvas  { position: absolute; left: 0px; top: 0px; width: 100%; height: 80%;}
 #graph_panel  { position: absolute; left: 0px; bottom: 0px; width: 100%; height: 20%; overflow: hidden; }
 #graph_canvas  { margin: 1px; }
@@ -214,7 +214,7 @@ function initialize(){
   $('#side_panel').resizable({
     handles: 'e',
     resize: function(event, ui){
-      //$('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
+      $('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
       $('#center_panel').css({'padding-left': $('#side_panel').width()});
     }
   }).resize(function(){
