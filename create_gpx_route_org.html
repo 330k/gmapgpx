@@ -239,8 +239,17 @@ function initialize(){
     }
   });
   $('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
-  $(window).resize(function(){
-    $('#side_panel').resize();
+  
+  (function(){
+    var timer;
+    $(window).resize(function(){
+      if (timer !== false) {
+        clearTimeout(timer);
+      }
+      timer = setTimeout(function() {
+        $('#side_panel').resize();
+      }, 200);
+    });
   });
   
   // Sortable
