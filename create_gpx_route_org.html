@@ -214,7 +214,8 @@ function initialize(){
   $('#side_panel').resizable({
     handles: 'e',
     resize: function(event, ui){
-      $('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
+      //$('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
+      $('#center_panel').style({'margin-left': $('#side_panel').width());
     }
   }).resize(function(){
     $('#graph_panel').resize();
