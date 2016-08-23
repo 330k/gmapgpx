@@ -247,8 +247,10 @@ function initialize(){
         clearTimeout(timer);
       }
       timer = setTimeout(function() {
+        console.log('Fire');
         $('#side_panel').resize();
       }, 200);
+      console.log('Set timer');
     });
   })();
   
