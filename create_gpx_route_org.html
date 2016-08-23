@@ -39,10 +39,10 @@ body  { width: 100%; height: 100%; margin: 0; padding: 0; }
 
 #center_panel  { position: absolute; right: 0px; top: 0px; width: 70%; height: 100%;}
 #map_canvas  { position: absolute; right: 0px; top: 0px; width: 100%; height: 80%;}
-#graph_panel  { position: absolute; right: 0px; top: 80%; width: 100%; height: 20%; overflow: hidden; }
+#graph_panel  { position: absolute; right: 0px; bottom: 0px; width: 100%; height: 20%; overflow: hidden; }
 #graph_canvas  { margin: 1px; }
 
-#side_panel  { position: absolute; left: 0px; top: 0px; width: 30%; min-width: 200px; max-width: 300px; height: 100%; overflow: hidden; }
+#side_panel  { position: absolute; left: 0px; top: 0px; width: 30%; /*min-width: 200px; max-width: 300px;*/ height: 100%; overflow: hidden; }
 #accordion  { font-size: 80%; }
 
 #tab_search input[type="text"]  { width: 100%; }
@@ -239,20 +239,6 @@ function initialize(){
     }
   });
   $('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
-  
-  (function(){
-    var timer;
-    $(window).resize(function(){
-      if (timer !== false) {
-        clearTimeout(timer);
-      }
-      timer = setTimeout(function() {
-        console.log('Fire');
-        $('#side_panel').resize();
-      }, 200);
-      console.log('Set timer');
-    });
-  })();
   
   // Sortable
   $('#waypoints').sortable({
