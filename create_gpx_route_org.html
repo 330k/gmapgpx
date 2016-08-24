@@ -212,9 +212,7 @@ function initialize(){
     });
   })();
   $('#side_panel').resizable({
-    handles: 'e',
-    resize: function(event, ui){
-    }
+    handles: 'e'
   }).resize(function(){
     var sideWidth = $('#side_panel').width();
     if(sideWidth < 200){
@@ -226,20 +224,18 @@ function initialize(){
     $('#side_panel').width(sideWidth);
     $('#center_panel').width($('body').innerWidth() - sideWidth);
     
-    $('#graph_panel').resize();
-    $('#map_canvas').resize();
+    //$('#graph_panel').resize();
+    //$('#map_canvas').resize();
     if(typeof localStorage !== 'undefined'){
       localStorage.setItem('side_panel_width', sideWidth);
     }
   });
   $('#graph_panel').resizable({
-    handles: 'n',
-    resize: function(event, ui){
-      $('#map_canvas').height($('#center_panel').innerHeight() - $('#graph_panel').height());
-    }
+    handles: 'n'
   }).resize(function(){
+    $('#map_canvas').height($('#center_panel').innerHeight() - $('#graph_panel').height());
+    //$('#map_canvas').resize();
     $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), $('#graph_panel').innerHeight());
-    $('#map_canvas').resize();
     if(typeof localStorage !== 'undefined'){
       localStorage.setItem('graph_panel_height', $('#graph_panel').height());
     }
