@@ -224,7 +224,7 @@ function initialize(){
     $('#side_panel').width(sideWidth);
     $('#center_panel').width($('body').innerWidth() - sideWidth);
     
-    //$('#graph_panel').resize();
+    $('#graph_panel').resize();
     //$('#map_canvas').resize();
     if(typeof localStorage !== 'undefined'){
       localStorage.setItem('side_panel_width', sideWidth);
@@ -233,8 +233,7 @@ function initialize(){
   $('#graph_panel').resizable({
     handles: 'n'
   }).resize(function(){
-    $('#map_canvas').height($('#center_panel').innerHeight() - $('#graph_panel').height());
-    //$('#map_canvas').resize();
+    $('#map_canvas').height($('#center_panel').innerHeight() - $('#graph_panel').height()).resize();
     $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), $('#graph_panel').innerHeight());
     if(typeof localStorage !== 'undefined'){
       localStorage.setItem('graph_panel_height', $('#graph_panel').height());
