@@ -214,16 +214,15 @@ function initialize(){
   $('#side_panel').resizable({
     handles: 'e',
     resize: function(event, ui){
-      var width = $('body').innerWidth() - $('#side_panel').width();
-      console.log(width);
-      if(width < 200){
-        width = 200;
+      var sideWidth = $('#side_panel').width();
+      if(sideWidth < 200){
+        sideWidth = 200;
       }
-      if(width > 400){
-        width = 400;
+      if(sideWidth > 400){
+        sideWidth = 400;
       }
-      console.log(width);
-      $('#center_panel').width(width);
+      $('#side_panel').width(sideWidth);
+      $('#center_panel').width($('body').innerWidth() - sideWidth);
     }
   }).resize(function(){
     $('#graph_panel').resize();
