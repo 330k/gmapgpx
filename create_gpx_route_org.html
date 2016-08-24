@@ -235,7 +235,7 @@ function initialize(){
   }).resize(function(){
     var graphHeight = $('#center_panel').innerHeight() - $('#graph_panel').height();
     $('#map_canvas').height(graphHeight).resize();
-    $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), $('#graph_panel').innerHeight());
+    $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
     if(typeof localStorage !== 'undefined'){
       localStorage.setItem('graph_panel_height', graphHeight);
     }
