@@ -239,7 +239,7 @@ function initialize(){
     if(typeof localStorage !== 'undefined'){
       localStorage.setItem('graph_panel_height', graphHeight);
     }
-  });
+  });/*
   if(typeof localStorage !== 'undefined'){
     var sideWidth = localStorage.getItem('side_panel_width');
     var graphHeight = localStorage.getItem('graph_panel_height');
@@ -250,7 +250,7 @@ function initialize(){
     if(graphHeight > 0){
       $('#map_canvas').height(graphHeight).resize();
     }
-  }
+  }*/
   
   // Sortable
   $('#waypoints').sortable({
