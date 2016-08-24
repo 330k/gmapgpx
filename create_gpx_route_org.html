@@ -215,12 +215,14 @@ function initialize(){
     handles: 'e',
     resize: function(event, ui){
       var width = $('body').innerWidth() - $('#side_panel').width();
+      console.log(width);
       if(width < 200){
         width = 200;
       }
-      if(width < 400){
+      if(width > 400){
         width = 400;
       }
+      console.log(width);
       $('#center_panel').width(width);
     }
   }).resize(function(){
