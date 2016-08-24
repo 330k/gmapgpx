@@ -214,21 +214,22 @@ function initialize(){
   $('#side_panel').resizable({
     handles: 'e',
     resize: function(event, ui){
-      var sideWidth = $('#side_panel').width();
-      if(sideWidth < 200){
-        sideWidth = 200;
-      }
-      if(sideWidth > 400){
-        sideWidth = 400;
-      }
-      $('#side_panel').width(sideWidth);
-      $('#center_panel').width($('body').innerWidth() - sideWidth);
     }
   }).resize(function(){
+    var sideWidth = $('#side_panel').width();
+    if(sideWidth < 200){
+      sideWidth = 200;
+    }
+    if(sideWidth > 400){
+      sideWidth = 500;
+    }
+    $('#side_panel').width(sideWidth);
+    $('#center_panel').width($('body').innerWidth() - sideWidth);
+    
     $('#graph_panel').resize();
     $('#map_canvas').resize();
     if(typeof localStorage !== 'undefined'){
-      localStorage.setItem('side_panel_width', $('#side_panel').width());
+      localStorage.setItem('side_panel_width', sideWidth);
     }
   });
   $('#graph_panel').resizable({
