@@ -243,7 +243,7 @@ function initialize(){
     }
   });
   
-  // 
+  // ユーザの保存値を復元
   if(typeof localStorage !== 'undefined'){
     (function(){
       var sideWidth = localStorage.getItem('side_panel_width');
@@ -253,7 +253,9 @@ function initialize(){
         $('#side_panel').width(sideWidth).resize();
       }
       if(graphHeight > 0){
+        console.log({'graphHeight':graphHeight});
         $('#graph_canvas').height(graphHeight).resize();
+        console.log({'graphHeight':$('#graph_canvas').height()});
       }
     })();
   }
