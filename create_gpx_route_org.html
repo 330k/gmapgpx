@@ -231,7 +231,7 @@ function initialize(){
   $('#graph_panel').resizable({
     handles: 'n',
     minHeight: 200,
-    minHeight: 500
+    maxHeight: 500
   }).resize(function(){
     var graphHeight = $('#graph_panel').height();
     $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight).resize();
