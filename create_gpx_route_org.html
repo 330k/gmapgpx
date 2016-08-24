@@ -206,10 +206,10 @@ function initialize(){
       var graphHeight = localStorage.getItem('graph_panel_height');
       
       if(sideWidth > 0){
-        $('#side_panel').width(sideWidth);
+        $('#side_panel').width(sideWidth).resize();
       }
       if(graphHeight > 0){
-        $('#graph_canvas').height(graphHeight);
+        $('#graph_canvas').height(graphHeight).resize();
       }
     })();
   }
