@@ -199,6 +199,20 @@ function initialize(){
     }
   });
   
+  // Resizeイベントハンドラを登録する前にリサイズ
+  if(typeof localStorage !== 'undefined'){
+    setTimeout(function(){
+      var sideWidth = localStorage.getItem('side_panel_width');
+      var graphHeight = localStorage.getItem('graph_panel_height');
+      
+      if(sideWidth > 0){
+        $('#side_panel').width(sideWidth);
+      }
+      if(graphHeight > 0){
+        $('#graph_canvas').height(graphHeight);
+      }
+    }, 1);
+  }
   
   // Resizable
   (function(){
@@ -251,20 +265,6 @@ function initialize(){
       localStorage.setItem('graph_panel_height', graphHeight);
     }
   });
-  if(typeof localStorage !== 'undefined'){
-    setTimeout(function(){
-      var sideWidth = localStorage.getItem('side_panel_width');
-      var graphHeight = localStorage.getItem('graph_panel_height');
-      
-      if(sideWidth > 0){
-        $('#side_panel').width(sideWidth).resize();
-      }
-      if(graphHeight > 0){
-        // 起動時には上手く調整できない
-        $('#graph_canvas').height(graphHeight).resize();
-      }
-    }, 1);
-  }
   
   // Sortable
   $('#waypoints').sortable({
