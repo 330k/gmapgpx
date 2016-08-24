@@ -214,7 +214,14 @@ function initialize(){
   $('#side_panel').resizable({
     handles: 'e',
     resize: function(event, ui){
-      $('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
+      var width = $('body').innerWidth() * 0.3;
+      if(width < 200){
+        width = 200;
+      }
+      if(width < 400){
+        width = 400;
+      }
+      $('#center_panel').width(width);
     }
   }).resize(function(){
     $('#graph_panel').resize();
