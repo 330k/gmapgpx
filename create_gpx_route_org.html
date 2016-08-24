@@ -244,8 +244,9 @@ function initialize(){
       graphHeight = 400;
     }
     $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight).resize();
-    $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
-    
+    if(typeof $('#graph_canvas').highcharts() !== 'undefined'){
+      $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
+    }
     if(typeof localStorage !== 'undefined'){
       localStorage.setItem('graph_panel_height', graphHeight);
     }
@@ -260,7 +261,7 @@ function initialize(){
       }
       if(graphHeight > 0){
         // 起動時には上手く調整できない
-        //$('#graph_canvas').height(graphHeight).resize();
+        $('#graph_canvas').height(graphHeight).resize();
       }
     }, 1);
   }
