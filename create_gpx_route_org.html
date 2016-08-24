@@ -214,15 +214,17 @@ function initialize(){
   })();
     
   $('#side_panel').resizable({
-    handles: 'e'
+    handles: 'e',
+    resize: function(event, ui){
+      if(ui.size.width < 200){
+        ui.size.width = 200;
+      }
+      if(ui.size.width > 500){
+        ui.size.width = 500;
+      }
+    }
   }).resize(function(){
     var sideWidth = $('#side_panel').width();
-    if(sideWidth < 200){
-      sideWidth = 200;
-    }
-    if(sideWidth > 500){
-      sideWidth = 500;
-    }
     $('#side_panel').width(sideWidth);
     $('#center_panel').width($('body').innerWidth() - sideWidth);
     
@@ -233,15 +235,17 @@ function initialize(){
     }
   });
   $('#graph_panel').resizable({
-    handles: 'n'
+    handles: 'n',
+    resize: function(event, ui){
+      if(ui.size.height < 100){
+        ui.size.height = 100;
+      }
+      if(ui.size.height > 400){
+        ui.size.height = 400;
+      }
+    }
   }).resize(function(){
     var graphHeight = $('#graph_panel').height();
-    if(graphHeight < 100){
-      graphHeight = 100;
-    }
-    if(graphHeight > 400){
-      graphHeight = 400;
-    }
     $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight).resize();
     $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
     if(typeof localStorage !== 'undefined'){
