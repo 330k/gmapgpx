@@ -199,21 +199,6 @@ function initialize(){
     }
   });
   
-  // Resizeイベントハンドラを登録する前にリサイズ
-  if(typeof localStorage !== 'undefined'){
-    (function(){
-      var sideWidth = localStorage.getItem('side_panel_width');
-      var graphHeight = localStorage.getItem('graph_panel_height');
-      
-      if(sideWidth > 0){
-        $('#side_panel').width(sideWidth).resize();
-      }
-      if(graphHeight > 0){
-        $('#graph_canvas').height(graphHeight).resize();
-      }
-    })();
-  }
-  
   // Resizable
   (function(){
     var timer = false;
@@ -227,17 +212,13 @@ function initialize(){
       }, 100);
     });
   })();
-    
+  
   $('#side_panel').resizable({
-    handles: 'e'
+    handles: 'e',
+    minWidth: 200,
+    maxWidth: 500
   }).resize(function(){
     var sideWidth = $('#side_panel').width();
-    if(sideWidth < 200){
-      sideWidth = 200;
-    }
-    if(sideWidth > 500){
-      sideWidth = 500;
-    }
     
     $('#side_panel').width(sideWidth);
     $('#center_panel').width($('body').innerWidth() - sideWidth);
@@ -248,15 +229,11 @@ function initialize(){
     }
   });
   $('#graph_panel').resizable({
-    handles: 'n'
+    handles: 'n',
+    minHeight: 200,
+    minHeight: 500
   }).resize(function(){
     var graphHeight = $('#graph_panel').height();
-    if(graphHeight < 100){
-      graphHeight = 100;
-    }
-    if(graphHeight > 400){
-      graphHeight = 400;
-    }
     $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight).resize();
     if(typeof $('#graph_canvas').highcharts() !== 'undefined'){
       $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
@@ -265,6 +242,21 @@ function initialize(){
       localStorage.setItem('graph_panel_height', graphHeight);
     }
   });
+  
+  // 
+  if(typeof localStorage !== 'undefined'){
+    (function(){
+      var sideWidth = localStorage.getItem('side_panel_width');
+      var graphHeight = localStorage.getItem('graph_panel_height');
+      
+      if(sideWidth > 0){
+        $('#side_panel').width(sideWidth).resize();
+      }
+      if(graphHeight > 0){
+        $('#graph_canvas').height(graphHeight).resize();
+      }
+    })();
+  }
   
   // Sortable
   $('#waypoints').sortable({
