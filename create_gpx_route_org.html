@@ -211,10 +211,17 @@ function initialize(){
         google.maps.event.trigger(map, 'resize');
       }, 100);
     });
+  })();
+  (function(){
+    var timer = false;
     
     $(window).resize(function(){
-      $('#side_panel').resize();
-      //$('#map_canvas').resize();
+      if (timer !== false) {
+        clearTimeout(timer);
+      }
+      timer = setTimeout(function() {
+        $('#side_panel').resize();
+      }, 100);
     });
   })();
   
