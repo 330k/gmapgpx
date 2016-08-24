@@ -201,15 +201,13 @@ function initialize(){
   
   // Resizable
   (function(){
-    var timer1 = false;
-    var timer2 = false;
-    var timer3 = false;
+    var timer = false;
     
     $('#map_canvas').resize(function() {
-      if (timer1 !== false) {
-        clearTimeout(timer1);
+      if (timer !== false) {
+        clearTimeout(timer);
       }
-      timer1 = setTimeout(function() {
+      timer = setTimeout(function() {
         google.maps.event.trigger(map, 'resize');
       }, 100);
     });
@@ -217,49 +215,39 @@ function initialize(){
     $('#side_panel').resizable({
       handles: 'e'
     }).resize(function(){
-      if(timer2 !== false){
-        clearTimeout(timer2);
+      var sideWidth = $('#side_panel').width();
+      if(sideWidth < 200){
+        sideWidth = 200;
       }
-      timer2 = setTimeout(function(){
-        var sideWidth = $('#side_panel').width();
-        if(sideWidth < 200){
-          sideWidth = 200;
-        }
-        if(sideWidth > 500){
-          sideWidth = 500;
-        }
-        $('#side_panel').width(sideWidth);
-        $('#center_panel').width($('body').innerWidth() - sideWidth);
-        
-        $('#graph_panel').resize();
-        //$('#map_canvas').resize();
-        if(typeof localStorage !== 'undefined'){
-          localStorage.setItem('side_panel_width', sideWidth);
-        }
-      }, 100);
+      if(sideWidth > 500){
+        sideWidth = 500;
+      }
+      $('#side_panel').width(sideWidth);
+      $('#center_panel').width($('body').innerWidth() - sideWidth);
+      
+      $('#graph_panel').resize();
+      //$('#map_canvas').resize();
+      if(typeof localStorage !== 'undefined'){
+        localStorage.setItem('side_panel_width', sideWidth);
+      }
     });
     $('#graph_panel').resizable({
       handles: 'n'
     }).resize(function(){
-      if(timer3 !== false){
-        clearTimeout(timer3);
+      var graphHeight = $('#graph_panel').height();
+      if(graphHeight < 100){
+        graphHeight = 100;
       }
-      timer3 = setTimeout(function(){
-        var graphHeight = $('#graph_panel').height();
-        if(graphHeight < 100){
-          graphHeight = 100;
-        }
-        if(graphHeight > 400){
-          graphHeight = 400;
-        }
-        $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight).resize();
-        $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
-        if(typeof localStorage !== 'undefined'){
-          localStorage.setItem('graph_panel_height', graphHeight);
-        }
-      }, 100);
+      if(graphHeight > 400){
+        graphHeight = 400;
+      }
+      $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight).resize();
+      $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
+      if(typeof localStorage !== 'undefined'){
+        localStorage.setItem('graph_panel_height', graphHeight);
+      }
     });
-  
+    
     if(typeof localStorage !== 'undefined'){
       var sideWidth = localStorage.getItem('side_panel_width');
       var graphHeight = localStorage.getItem('graph_panel_height');
