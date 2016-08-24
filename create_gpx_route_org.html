@@ -215,7 +215,7 @@ function initialize(){
     
   $('#side_panel').resizable({
     handles: 'e',
-    resize: function(event, ui){
+    stop: function(event, ui){
       if(ui.size.width < 200){
         ui.size.width = 200;
       }
@@ -236,7 +236,7 @@ function initialize(){
   });
   $('#graph_panel').resizable({
     handles: 'n',
-    resize: function(event, ui){
+    stop: function(event, ui){
       if(ui.size.height < 100){
         ui.size.height = 100;
       }
