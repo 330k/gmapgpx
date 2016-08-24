@@ -199,6 +199,72 @@ function initialize(){
     }
   });
   
+  
+  // Resizable
+  (function(){
+    var timer = false;
+    
+    $('#map_canvas').resize(function() {
+      if (timer !== false) {
+        clearTimeout(timer);
+      }
+      timer = setTimeout(function() {
+        google.maps.event.trigger(map, 'resize');
+      }, 100);
+    });
+  })();
+    
+  $('#side_panel').resizable({
+    handles: 'e'
+  }).resize(function(){
+    var sideWidth = $('#side_panel').width();
+    if(sideWidth < 200){
+      sideWidth = 200;
+    }
+    if(sideWidth > 500){
+      sideWidth = 500;
+    }
+    
+    $('#side_panel').width(sideWidth);
+    $('#center_panel').width($('body').innerWidth() - sideWidth);
+    
+    $('#graph_panel').resize();
+    if(typeof localStorage !== 'undefined'){
+      localStorage.setItem('side_panel_width', sideWidth);
+    }
+  });
+  $('#graph_panel').resizable({
+    handles: 'n'
+  }).resize(function(){
+    var graphHeight = $('#graph_panel').height();
+    if(graphHeight < 100){
+      graphHeight = 100;
+    }
+    if(graphHeight > 400){
+      graphHeight = 400;
+    }
+    $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight).resize();
+    $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
+    
+    if(typeof localStorage !== 'undefined'){
+      localStorage.setItem('graph_panel_height', graphHeight);
+    }
+  });
+  if(typeof localStorage !== 'undefined'){
+    setTimeout(function(){
+      var sideWidth = localStorage.getItem('side_panel_width');
+      var graphHeight = localStorage.getItem('graph_panel_height');
+      
+      if(sideWidth > 0){
+        $('#side_panel').width(sideWidth).resize();
+      }
+      if(graphHeight > 0){
+        // 起動時には上手く調整できない
+        //$('#graph_canvas').height(graphHeight).resize();
+      }
+    }, 1);
+  }
+  
   // Sortable
   $('#waypoints').sortable({
   }).disableSelection();
@@ -388,71 +454,6 @@ function initialize(){
   });
 
   createGPXDownloadLink();
-  
-  // Resizable
-  (function(){
-    var timer = false;
-    
-    $('#map_canvas').resize(function() {
-      if (timer !== false) {
-        clearTimeout(timer);
-      }
-      timer = setTimeout(function() {
-        google.maps.event.trigger(map, 'resize');
-      }, 100);
-    });
-  })();
-    
-  $('#side_panel').resizable({
-    handles: 'e'
-  }).resize(function(){
-    var sideWidth = $('#side_panel').width();
-    if(sideWidth < 200){
-      sideWidth = 200;
-    }
-    if(sideWidth > 500){
-      sideWidth = 500;
-    }
-    
-    $('#side_panel').width(sideWidth);
-    $('#center_panel').width($('body').innerWidth() - sideWidth);
-    
-    $('#graph_panel').resize();
-    if(typeof localStorage !== 'undefined'){
-      localStorage.setItem('side_panel_width', sideWidth);
-    }
-  });
-  $('#graph_panel').resizable({
-    handles: 'n'
-  }).resize(function(){
-    var graphHeight = $('#graph_panel').height();
-    if(graphHeight < 100){
-      graphHeight = 100;
-    }
-    if(graphHeight > 400){
-      graphHeight = 400;
-    }
-    $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight).resize();
-    if(typeof $('#graph_canvas').highcharts() !== 'undefined'){
-      $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
-    }
-    if(typeof localStorage !== 'undefined'){
-      localStorage.setItem('graph_panel_height', graphHeight);
-    }
-  });
-  if(typeof localStorage !== 'undefined'){
-    setTimeout(function(){
-      var sideWidth = localStorage.getItem('side_panel_width');
-      var graphHeight = localStorage.getItem('graph_panel_height');
-      
-      if(sideWidth > 0){
-        $('#side_panel').width(sideWidth).resize();
-      }
-      if(graphHeight > 0){
-        $('#graph_canvas').height(graphHeight).resize();
-      }
-    }, 1);
-  }
 }
 
 // Google Maps APIでルートを検索
