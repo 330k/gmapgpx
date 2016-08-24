@@ -246,6 +246,12 @@ function initialize(){
       }
       timer3 = setTimeout(function(){
         var graphHeight = $('#center_panel').innerHeight() - $('#graph_panel').height();
+        if(graphHeight < 100){
+          graphHeight = 100;
+        }
+        if(graphHeight > 400){
+          graphHeight = 400;
+        }
         $('#map_canvas').height(graphHeight).resize();
         $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
         if(typeof localStorage !== 'undefined'){
