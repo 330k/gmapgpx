@@ -233,12 +233,24 @@ function initialize(){
   $('#graph_panel').resizable({
     handles: 'n'
   }).resize(function(){
-    $('#map_canvas').height($('#center_panel').innerHeight() - $('#graph_panel').height()).resize();
+    var graphHeight = $('#center_panel').innerHeight() - $('#graph_panel').height();
+    $('#map_canvas').height(graphHeight).resize();
     $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), $('#graph_panel').innerHeight());
     if(typeof localStorage !== 'undefined'){
-      localStorage.setItem('graph_panel_height', $('#graph_panel').height());
+      localStorage.setItem('graph_panel_height', graphHeight);
     }
   });
+  if(typeof localStorage !== 'undefined'){
+    var sideWidth = localStorage.getItem('side_panel_width');
+    var graphHeight = localStorage.getItem('graph_panel_height');
+    
+    if(sideWidth > 0){
+      $('#side_panel').width(sideWidth).resize();
+    }
+    if(graphHeight > 0){
+      $('#map_canvas').height(graphHeight).resize();
+    }
+  }
   
   // Sortable
   $('#waypoints').sortable({
