@@ -230,8 +230,8 @@ function initialize(){
   });
   $('#graph_panel').resizable({
     handles: 'n',
-    minHeight: 200,
-    maxHeight: 500
+    minHeight: 100,
+    maxHeight: 400
   }).resize(function(){
     var graphHeight = $('#graph_panel').height();
     $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight).resize();
