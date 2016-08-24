@@ -247,12 +247,13 @@ function initialize(){
   }).resize(function(){
     var graphHeight = $('#graph_panel').height();
     $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight).resize();
-    $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
+    if(typeof $('#graph_canvas').highcharts() !== 'undefined'){
+      $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
+    }
     if(typeof localStorage !== 'undefined'){
       localStorage.setItem('graph_panel_height', graphHeight);
     }
   });
-  ///*
   if(typeof localStorage !== 'undefined'){
     setTimeout(function(){
       var sideWidth = localStorage.getItem('side_panel_width');
@@ -265,7 +266,7 @@ function initialize(){
         $('#graph_canvas').height(graphHeight).resize();
       }
     }, 10);
-  }//*/
+  }
   
   // Sortable
   $('#waypoints').sortable({
