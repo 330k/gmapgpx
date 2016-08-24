@@ -199,7 +199,7 @@ function initialize(){
     }
   });
   
-  // Resizable
+  // Resizeイベントでマップ更新
   (function(){
     var timer = false;
     
@@ -211,8 +211,14 @@ function initialize(){
         google.maps.event.trigger(map, 'resize');
       }, 100);
     });
+    
+    $(window).resize(function(){
+      $('#side_panel').resize();
+      //$('#map_canvas').resize();
+    });
   })();
   
+  // Resizable
   $('#side_panel').resizable({
     handles: 'e',
     minWidth: 200,
