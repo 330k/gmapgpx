@@ -265,11 +265,13 @@ function initialize(){
       if(sideWidth > 0){
         $('#side_panel').width(sideWidth).resize();
       }
-      if(graphHeight > 0){
-        console.log('graphHeight : ' + graphHeight);
-        $('#graph_canvas').height(graphHeight).resize();
-        console.log('graphHeight : ' + $('#graph_canvas').height());
-      }
+      setTimeout(function(){
+        if(graphHeight > 0){
+          console.log('graphHeight : ' + graphHeight);
+          $('#graph_canvas').height(graphHeight).resize();
+          console.log('graphHeight : ' + $('#graph_canvas').height());
+        }
+      },500);
     })();
   }
   
