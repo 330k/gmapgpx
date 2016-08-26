@@ -464,7 +464,7 @@ function initialize(){
       window.navigator.msSaveBlob(blob, filename); 
     } else {
       // Chrome, Firefox
-      $downloadLink.appendTo($('body')).click();
+      $downloadLink.appendTo($('body')).get(0).click();
     }
     
   });
