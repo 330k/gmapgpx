@@ -164,7 +164,6 @@ button.ui-dialog-titlebar-close  { display: none; }
 </div>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
-<!--<script type="text/javascript" src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script>-->
 <script type="text/javascript" src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
 <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
 <script type="text/javascript" defer="defer">
@@ -212,15 +211,6 @@ function initialize(){
         google.maps.event.trigger(map, 'resize');
         console.log('google map resized');
         
-    var sideWidth = $('#side_panel').width();
-    
-    $('#center_panel').width($('body').innerWidth() - sideWidth);
-    var graphHeight = $('#graph_panel').height();
-    
-    $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight).resize();
-    if(typeof $('#graph_canvas').highcharts() !== 'undefined'){
-      $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
-    }
     
       }, 100);
     });
@@ -232,12 +222,21 @@ function initialize(){
     minWidth: 200,
     maxWidth: 500
   }).resize(function(){
+    var sideWidth = $('#side_panel').width();
+    
+    $('#center_panel').width($('body').innerWidth() - sideWidth);
   });
   $('#graph_panel').resizable({
     handles: 'n',
     minHeight: 100,
     maxHeight: 400
   }).resize(function(){
+    var graphHeight = $('#graph_panel').height();
+    
+    $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight);
+    if(typeof $('#graph_canvas').highcharts() !== 'undefined'){
+      $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
+    }
   });
   
   // UIサイズを保存
