@@ -211,6 +211,17 @@ function initialize(){
       timer = setTimeout(function() {
         google.maps.event.trigger(map, 'resize');
         console.log('google map resized');
+        
+    var sideWidth = $('#side_panel').width();
+    
+    $('#center_panel').width($('body').innerWidth() - sideWidth);
+    var graphHeight = $('#graph_panel').height();
+    
+    $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight).resize();
+    if(typeof $('#graph_canvas').highcharts() !== 'undefined'){
+      $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
+    }
+    
       }, 100);
     });
   })();
@@ -221,23 +232,12 @@ function initialize(){
     minWidth: 200,
     maxWidth: 500
   }).resize(function(){
-    var sideWidth = $('#side_panel').width();
-    
-    $('#side_panel').width(sideWidth);
-    $('#center_panel').width($('body').innerWidth() - sideWidth);
-    
-    $('#graph_panel').resize();
   });
   $('#graph_panel').resizable({
     handles: 'n',
     minHeight: 100,
     maxHeight: 400
   }).resize(function(){
-    var graphHeight = $('#graph_panel').height();
-    $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight).resize();
-    if(typeof $('#graph_canvas').highcharts() !== 'undefined'){
-      $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
-    }
   });
   
   // UIサイズを保存
