@@ -217,7 +217,7 @@ function initialize(){
         }
         google.maps.event.trigger(map, 'resize');
         console.log('google map resized window');
-      }, 100);
+      }, 200);
     });
   })();
   $('#side_panel').resizable({
@@ -225,7 +225,9 @@ function initialize(){
     minWidth: 200,
     maxWidth: 500,
     stop: function(event, ui){
-      $('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
+      var sideWidth = $('#side_panel').width();
+      
+      $('#center_panel').width($('body').innerWidth() - sideWidth);
       $('#graph_panel').resize();
     }
   });
@@ -234,11 +236,12 @@ function initialize(){
     minHeight: 100,
     maxHeight: 400,
     stop: function(event, ui){
-    var graphHeight = $('#graph_panel').height();
-    
-    $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight);
-    if(typeof $('#graph_canvas').highcharts() !== 'undefined'){
-      $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
+      var graphHeight = $('#graph_panel').height();
+      
+      $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight);
+      if(typeof $('#graph_canvas').highcharts() !== 'undefined'){
+        $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
+      }
     }
   });
   
