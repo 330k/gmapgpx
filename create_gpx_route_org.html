@@ -197,6 +197,8 @@ if(location.protocol == 'http:') {
 
 // 初期化(Document Ready)
 $(function(){
+  'use strict';
+  
   // Side Panel
   $('#accordion').accordion({
     heightStyle: 'fill',
@@ -314,7 +316,7 @@ $(function(){
     var $downloadLink = $('<a></a>'),
       gpx = $('#gpx_text').val(),
       filename = $('#input_download_filename').val(),
-      blob = null;
+      blob = null,
       bb = null;
     
     window.URL = window.URL || window.webkitURL;
@@ -975,7 +977,7 @@ var simplifyGPX = (function(){
       t = (ax * ax + ay * ay + bx * px - ax * (bx + px) + by * py - ay * (by + py))/(ax * ax + ay * ay - 2 * ax * bx + bx * bx - 2 * ay * by + by * by);
     
     if((0 <= t) && (t <= 1)){
-      x = ax - (ax - bx) * t,
+      x = ax - (ax - bx) * t;
       y = ay - (ay - by) * t;
       
       return ((x - px) * (x - px) + (y - py) * (y - py));
