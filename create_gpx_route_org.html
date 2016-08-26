@@ -180,15 +180,16 @@ button.ui-dialog-titlebar-close  { display: none; }
 <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
 <script type="text/javascript" defer="defer">
 /* global $, google, BlobBuilder */
-var map;
-var gpxdata = {
-  name: '',
-  bounds: {
-    minlat: 0, minlon: 0, maxlat: 0, maxlon: 0
-  },
-  desc: '',
-  trksegs: [[]]
-};
+var map,
+  directionsDisplay,
+  gpxdata = {
+    name: '',
+    bounds: {
+      minlat: 0, minlon: 0, maxlat: 0, maxlon: 0
+    },
+    desc: '',
+    trksegs: [[]]
+  };
 
 // HTTPはHTTPSへリダイレクト
 if(location.protocol == 'http:') {
@@ -419,7 +420,7 @@ function initialize(){
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     center: new google.maps.LatLng(35.681382, 139.766084)
   });
-  var directionsDisplay = new google.maps.DirectionsRenderer({
+  directionsDisplay = new google.maps.DirectionsRenderer({
     draggable: true
   });
   directionsDisplay.setMap(map);
