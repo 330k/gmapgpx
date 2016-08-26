@@ -38,7 +38,7 @@ body  { width: 100%; height: 100%; margin: 0; padding: 0; }
 
 #center_panel  { position: absolute; right: 0px; top: 0px; width: 75%; height: 100%;}
 #map_canvas  { position: absolute; right: 0px; top: 0px; width: 100%; height: 80%;}
-#graph_panel  { position: absolute; right: 0px; bottom: 0px; width: 100%; height: 20%; overflow: hidden; }
+#graph_panel  { position: absolute; right: 0px; top: 80%; width: 100%; height: 20%; overflow: hidden; }
 #graph_canvas  { margin: 1px; }
 
 #side_panel  { position: absolute; left: 0px; top: 0px; width: 25%; height: 100%; overflow: hidden; }
@@ -262,7 +262,7 @@ function initialize(){
         console.log('before graphHeight : ' + $('#graph_canvas').height());
         console.log('loaded graphHeight : ' + graphHeight);
         $('#graph_canvas').css({
-          //top : $('#center_panel').innerHeight() - graphHeight,
+          top : $('#center_panel').innerHeight() - graphHeight,
           height: graphHeight  
         }).resize();
         console.log('after  graphTop    : ' + $('#graph_canvas').css('top'));
