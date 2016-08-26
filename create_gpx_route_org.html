@@ -199,6 +199,32 @@ function initialize(){
     }
   });
   
+  // ユーザの保存値を復元
+  if(typeof localStorage !== 'undefined'){
+    (function(){
+      var sideWidth = localStorage.getItem('side_panel_width');
+      var graphHeight = localStorage.getItem('graph_panel_height');
+      
+      if(sideWidth > 0){
+        console.log('before sideWidth : ' + $('#side_panel').width());
+        console.log('saved  sideWidth : ' + sideWidth);
+        $('#side_panel').width(sideWidth).resize();
+        console.log('after  sideWidth : ' + sideWidth);
+      }
+      setTimeout(function(){
+        if(graphHeight > 0){
+          console.log('before graphHeight : ' + $('#graph_canvas').height());
+          console.log('saved  graphHeight : ' + graphHeight);
+          $('#graph_canvas').css({
+            top : $('#center_panel').innerHeight() - graphHeight,
+            height: graphHeight  
+          }).resize();
+          console.log('after  graphHeight : ' + $('#graph_canvas').height());
+        }
+      },500);
+    })();
+  }
+  
   // Resizeイベントでマップ更新
   (function(){
     var timer = false;
@@ -212,7 +238,7 @@ function initialize(){
       }, 100);
     });
   })();
-  (function(){
+  /*(function(){
     var timer = false;
     
     $(window).resize(function(){
@@ -223,7 +249,7 @@ function initialize(){
         $('#side_panel').resize();
       }, 100);
     });
-  })();
+  })();*/
   
   // Resizable
   $('#side_panel').resizable({
@@ -257,32 +283,6 @@ function initialize(){
       console.log('stored graphHeight : ' + graphHeight);
     }
   });
-  
-  // ユーザの保存値を復元
-  if(typeof localStorage !== 'undefined'){
-    (function(){
-      var sideWidth = localStorage.getItem('side_panel_width');
-      var graphHeight = localStorage.getItem('graph_panel_height');
-      
-      if(sideWidth > 0){
-        console.log('before sideWidth : ' + $('#side_panel').width());
-        console.log('saved  sideWidth : ' + sideWidth);
-        $('#side_panel').width(sideWidth).resize();
-        console.log('after  sideWidth : ' + sideWidth);
-      }
-      setTimeout(function(){
-        if(graphHeight > 0){
-          console.log('before graphHeight : ' + $('#graph_canvas').height());
-          console.log('saved  graphHeight : ' + graphHeight);
-          $('#graph_canvas').css({
-            top : $('#center_panel').innerHeight() - graphHeight,
-            height: graphHeight  
-          }).resize();
-          console.log('after  graphHeight : ' + $('#graph_canvas').height());
-        }
-      },500);
-    })();
-  }
   
   // Sortable
   $('#waypoints').sortable({
