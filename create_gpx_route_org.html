@@ -261,10 +261,13 @@ function initialize(){
       if(graphHeight > 0){
         console.log('before graphHeight : ' + $('#graph_canvas').height());
         console.log('loaded graphHeight : ' + graphHeight);
+        var mapHeight = $('#center_panel').innerHeight() - graphHeight;
+        $('#map_canvas').height(mapHeight);
         $('#graph_canvas').css({
-          top : $('#center_panel').innerHeight() - graphHeight,
+          top : mapHeight,
           height: graphHeight  
         }).resize();
+        console.log('after  mapHeight : ' + $('#map_canvas').height());
         console.log('after  graphTop    : ' + $('#graph_canvas').css('top'));
         console.log('after  graphHeight : ' + $('#graph_canvas').height());
       }
