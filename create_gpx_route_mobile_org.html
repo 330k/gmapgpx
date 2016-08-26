@@ -468,6 +468,7 @@ function createGPXDownloadLink(){
   var buf = [],
     trkseg = gpxdata.trksegs[0],
     i = 0,
+    gpx = '',
     e = null,
     blob = null,
     bb = null;
@@ -505,7 +506,8 @@ function createGPXDownloadLink(){
     buf.push('<\/trk>');
     buf.push('<\/gpx>');
     
-    $('#gpx_text').val(buf.join('\n'));
+    gpx = buf.join('\n');
+    $('#gpx_text').val(gpx);
     
     e = document.getElementById('gpx_download_link');
     
