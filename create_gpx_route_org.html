@@ -198,7 +198,7 @@ function initialize(){
     }
   });
   
-  // Resizable, Resize Event
+  // Resize Event
   (function(){
     var timer = false;
     
@@ -217,36 +217,25 @@ function initialize(){
         }
         google.maps.event.trigger(map, 'resize');
         console.log('google map resized window');
-      }, 50);
+      }, 10);
     });
   })();
+  
+  // Resizableウィジェット
   $('#side_panel').resizable({
     handles: 'e',
     minWidth: 200,
-    maxWidth: 500/*,
-    stop: function(event, ui){
-      var sideWidth = $('#side_panel').width();
-      
-      $('#center_panel').width($('body').innerWidth() - sideWidth);
-      $('#graph_panel').resize();
-    }*/
+    maxWidth: 500
   });
   $('#graph_panel').resizable({
     handles: 'n',
     minHeight: 100,
-    maxHeight: 400/*,
-    stop: function(event, ui){
-      var graphHeight = $('#graph_panel').height();
-      
-      $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight);
-      if(typeof $('#graph_canvas').highcharts() !== 'undefined'){
-        $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
-      }
-    }*/
+    maxHeight: 400
   });
   
-  // UIサイズを保存
+  // localStorage対応時
   if(typeof localStorage !== 'undefined'){
+    // UIサイズを保存
     $(window).on('unload', function(){
       var sideWidth = $('#side_panel').width();
       var graphHeight = $('#graph_panel').height();
@@ -257,11 +246,9 @@ function initialize(){
       console.log('saved  sideWidth : ' + sideWidth);
       console.log('saved  graphHeight : ' + graphHeight);
     });
-  }
-  
-  // UIサイズの保存値を復元
-  if(typeof localStorage !== 'undefined'){
-    (function(){
+    
+    // UIサイズの保存値を復元
+    $(window).on('load', function(){
       var sideWidth = localStorage.getItem('side_panel_width');
       var graphHeight = localStorage.getItem('graph_panel_height');
       
@@ -281,7 +268,7 @@ function initialize(){
         console.log('after  graphTop    : ' + $('#graph_canvas').css('top'));
         console.log('after  graphHeight : ' + $('#graph_canvas').height());
       }
-    })();
+    });
   }
   
   // Sortable
