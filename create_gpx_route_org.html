@@ -209,10 +209,8 @@ function initialize(){
       timer = setTimeout(function() {
         google.maps.event.trigger(map, 'resize');
         console.log('google map resized window');
-        
-    
       }, 100);
-    $('#center_panel').width($('body').innerWidth() - sideWidth);
+      $('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
     });
   })();
   $('#map_canvas').resize(function() {
