@@ -59,6 +59,9 @@ body  { width: 100%; height: 100%; margin: 0; padding: 0; }
 #button_add_elevation  { width: 100%; }
 #gpx_text  { width: 100%; height : 80%; font-size: 10px; overflow: auto; }
 
+#popup_menu { display: none; position: absolute; }
+#dialog { display: none; }
+
 button.ui-dialog-titlebar-close  { display: none; }
 </style>
 </head>
@@ -162,6 +165,14 @@ button.ui-dialog-titlebar-close  { display: none; }
 </div>
 </div>
 </div>
+
+<ul id="popup_menu">
+ <li><a id="rmenu_set_origin">Set this point as Origin</a></li>
+ <li><a id="rmenu_set_destination">Set this point as Destination</a></li>
+ <li><a id="rmenu_clear_waypoints">Clear all Waypoints</a></li>
+ <li><a id="rmenu_reverse_origin_destination">Reverse Origin and Destination</a></li>
+</ul>
+<div id="dialog"><\/div>
 
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
@@ -283,7 +294,7 @@ function initialize(){
   }); // Fix for Firefox
   
   // Dialog
-  $('<div id="dialog"><\/div>').dialog({
+  $('#dialog').dialog({
     modal: true,
     closeOnEscape: false,
     autoOpen: false,
@@ -331,12 +342,7 @@ function initialize(){
   });
 
   // Right Click on Map
-  $('<ul id="rmenu">' +
-    '<li><a id="rmenu_set_origin">Set this point as Origin<\/a><\/li>' +
-    '<li><a id="rmenu_set_destination">Set this point as Destination<\/a><\/li>' +
-    '<li><a id="rmenu_clear_waypoints">Clear all Waypoints<\/a><\/li>' +
-    '<li><a id="rmenu_reverse_origin_destination">Reverse Origin and Destination<\/a><\/li>' +
-    '<\/div>').appendTo($('body')).menu().css('position', 'absolute').hide();
+  $('#rmenu').menu();
   google.maps.event.addListener(map, 'rightclick', function(point) {
     (function(lat, lng){
       $('#rmenu_set_origin').off('click').click(function(event){
