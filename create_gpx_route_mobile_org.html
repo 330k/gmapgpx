@@ -158,22 +158,22 @@ body  { height: 100%; margin: 0; padding: 0; user-select: none;}
 <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
 <script type="text/javascript" defer="defer">
 /* global $, google, BlobBuilder */
-var map;
-var gpxdata = {
-  name: '',
-  bounds: {
-    minlat: 0, minlon: 0, maxlat: 0, maxlon: 0
+var map,
+  gpxdata = {
+    name: '',
+    bounds: {
+      minlat: 0, minlon: 0, maxlat: 0, maxlon: 0
+    },
+    desc: '',
+    trksegs: [[]]
   },
-  desc: '',
-  trksegs: [[]]
-};
-var directionsDisplay = null;
+  directionsDisplay = null;
 
 // HTTPはHTTPSへリダイレクト
 if(location.protocol == 'http:') {
   location.replace(location.href.replace(/http:/, 'https:'));
 }
-navigator.standalone = navigator.standalone || (screen.height-document.documentElement.clientHeight<40);
+navigator.standalone = navigator.standalone || (screen.height - document.documentElement.clientHeight < 40);
 
 function initialize(){
   'use strict';
@@ -338,7 +338,9 @@ function initialize(){
 
 function calcRoute() {
   'use strict';
-  var waypoints = [];
+  var waypoints = [],
+    request = null,
+    directionsService = null;
   $('#waypoints input').each(function(){
     if($(this).val() !== ''){
       waypoints.push({
@@ -347,7 +349,7 @@ function calcRoute() {
       });
     }
   });
-  var request = {
+  request = {
     origin: $('#input_origin').val(),
     destination: $('#input_destination').val(),
     travelMode: google.maps.TravelMode[$('#select_travel_mode').val()],
@@ -361,7 +363,7 @@ function calcRoute() {
     textVisible: true
   });
   
-  var directionsService = new google.maps.DirectionsService();
+  directionsService = new google.maps.DirectionsService();
   directionsService.route(request, function(response, status) {
     if (status === google.maps.DirectionsStatus.OK) {
       $('#page_map').one('pageshow', function(){
@@ -386,8 +388,16 @@ function calcRoute() {
 
 function createGPXFromDirections(response){
   'use strict';
-  var route = response.routes[0];
-  var bounds = route.bounds.toUrlValue().split(',');
+  var route = response.routes[0],
+    bounds = route.bounds.toUrlValue().split(',');
+    lat = 0.0,
+    lng = 0.0,
+    oldlat = 540.0,
+    oldlng = 540.0,
+    trkseg = null,
+    i = 0,
+    j = 0,
+    k = 0;
   
   gpxdata.bounds.minlat = bounds[0];
   gpxdata.bounds.minlon = bounds[1];
@@ -397,14 +407,11 @@ function createGPXFromDirections(response){
   gpxdata.name = route.legs[0].start_address + ' to ' + route.legs[route.legs.length - 1].end_address;
   gpxdata.trksegs = [[]];
   
-  var oldlat = 540;
-  var oldlng = 540;
-  var trkseg = gpxdata.trksegs[0];
-  for(var i = 0; i < route.legs.length; i++){
-    for(var j = 0; j < route.legs[i].steps.length; j++){
-      for(var k = 0; k < route.legs[i].steps[j].path.length; k++){
-        var lat = route.legs[i].steps[j].path[k].lat();
-        var lng = route.legs[i].steps[j].path[k].lng();
+  for(i = 0; i < route.legs.length; i++){
+    for(j = 0; j < route.legs[i].steps.length; j++){
+      for(k = 0; k < route.legs[i].steps[j].path.length; k++){
+        lat = route.legs[i].steps[j].path[k].lat();
+        lng = route.legs[i].steps[j].path[k].lng();
         
         if((lat !== oldlat) || (lng !== oldlng)){
           trkseg.push({

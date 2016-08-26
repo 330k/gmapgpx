@@ -180,7 +180,7 @@ button.ui-dialog-titlebar-close  { display: none; }
 <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
 <script type="text/javascript" defer="defer">
 /* global $, google, BlobBuilder */
-var map,
+var map = null,
   gpxdata = {
     name: '',
     bounds: {
@@ -224,7 +224,6 @@ $(function(){
           $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
         }
         google.maps.event.trigger(map, 'resize');
-        console.log('google map resized window');
       }, 10);
     });
   })();
@@ -250,37 +249,23 @@ $(function(){
       
       localStorage.setItem('side_panel_width', sideWidth);
       localStorage.setItem('graph_panel_height', graphHeight);
-      
-      console.log('saved  sideWidth : ' + sideWidth);
-      console.log('saved  graphHeight : ' + graphHeight);
     });
     
     // UIサイズの保存値を復元
-    //$(window).on('load', function(){
-      var sideWidth = localStorage.getItem('side_panel_width'),
-        graphHeight = localStorage.getItem('graph_panel_height');
-      
-      if(sideWidth > 0){
-        console.log('before sideWidth : ' + $('#side_panel').width());
-        console.log('stored sideWidth : ' + sideWidth);
-        $('#side_panel').width(sideWidth);
-        console.log('after  sideWidth : ' + sideWidth);
-      }
-      if(graphHeight > 0){
-        console.log('before graphHeight : ' + $('#graph_panel').height());
-        console.log('loaded graphHeight : ' + graphHeight);
-        var mapHeight = $('#center_panel').innerHeight() - graphHeight;
-        $('#map_canvas').height(mapHeight);
-        $('#graph_panel').css({
-          //top : mapHeight,
-          height: graphHeight  
-        });
-        console.log('after  mapHeight : ' + $('#map_canvas').height());
-        console.log('after  graphTop    : ' + $('#graph_panel').css('top'));
-        console.log('after  graphHeight : ' + $('#graph_panel').height());
-      }
-      $(window).trigger('resize');
-    //});
+    var sideWidth = localStorage.getItem('side_panel_width'),
+      graphHeight = localStorage.getItem('graph_panel_height');
+    
+    if(sideWidth > 0){
+      $('#side_panel').width(sideWidth);
+    }
+    if(graphHeight > 0){
+      var mapHeight = $('#center_panel').innerHeight() - graphHeight;
+      $('#map_canvas').height(mapHeight);
+      $('#graph_panel').css({
+        height: graphHeight  
+      });
+    }
+    $(window).trigger('resize');
   }
   
   // Sortable
@@ -392,7 +377,7 @@ $(function(){
 // 初期化(Google Maps API読み込み後に実行)
 function initialize(){
   'use strict';
-  var directionsDisplay;
+  var directionsDisplay = null;
   
   // Google Maps Initialize
   map = new google.maps.Map(document.getElementById('map_canvas'), {
@@ -477,8 +462,7 @@ function initialize(){
       }
     });
     $('#popup_menu_reverse_origin_destination').click(function(event){
-      var i = null,
-        buf = [];
+      var buf = [];
       event.preventDefault();
       
       buf.push($('#input_origin').val());
@@ -518,8 +502,8 @@ function initialize(){
 function calcRoute(directionsDisplay) {
   'use strict';
   var waypoints = [],
-    request,
-    directionsService;
+    request = null,
+    directionsService = null;
   $('#waypoints input').each(function(){
     if($(this).val() !== ''){
       waypoints.push({
@@ -830,7 +814,7 @@ var addElevationToGPX = (function(){
       cache = null,
       i = 0,
       j = 0,
-      total;
+      total = 0;
     for(i = 0; i < trkseg.length; i++){
       if((trkseg[i].enabled) && (trkseg[i].ele === null)){
         cache = elecache[(new google.maps.LatLng(trkseg[i].lat, trkseg[i].lon)).toUrlValue()];
@@ -929,7 +913,7 @@ var simplifyGPX = (function(){
       queue = new PriorityQueue(),
       farthest = null,
       count = 2,
-      v;
+      v = null;
     
     // メルカトル図法で投影
     for(i = 0; i < trkseg.length; i++){
@@ -986,8 +970,8 @@ var simplifyGPX = (function(){
   }
 
   function segmentPointDistance(ax, ay, bx, by, px, py){
-    var x,
-      y,
+    var x = 0.0,
+      y = 0.0,
       t = (ax * ax + ay * ay + bx * px - ax * (bx + px) + by * py - ay * (by + py))/(ax * ax + ay * ay - 2 * ax * bx + bx * bx - 2 * ay * by + by * by);
     
     if((0 <= t) && (t <= 1)){
@@ -1170,7 +1154,9 @@ var createGraphData = (function(){
           name: 'evelation',
           data: []
         }]
-      };
+      },
+      i = 0,
+      dist = 0.0;
     if(marker === null){
       marker = new google.maps.Marker({
         position: null,
@@ -1178,9 +1164,9 @@ var createGraphData = (function(){
       });
     }
     
-    for(var i = 0; i < trkseg.length; i++){
+    for(i = 0; i < trkseg.length; i++){
       if(trkseg[i].enabled && trkseg[i].total_distance && trkseg[i].ele){
-        var dist = (trkseg[i].total_distance * 0.001).toFixed(3) - 0;
+        dist = (trkseg[i].total_distance * 0.001).toFixed(3) - 0;
         data.series[0].data.push([
           dist,
           trkseg[i].ele.toFixed(2) - 0
