@@ -105,7 +105,6 @@ button.ui-dialog-titlebar-close  { display: none; }
  <div id="tab_gpx_001">
   <span>GPX File Name:</span>
   <input id="input_download_filename" type="text" value="download.gpx" />
-  <a id="gpx_download_link">Download</a>
   <button id="button_download_gpx">Download</button>
   <select id="select_reduce_points">
    <option value="100">Reduce to 100 points</option>
@@ -326,7 +325,8 @@ function initialize(){
     createGPXFromDirections(directionsDisplay.directions);
     updateSearchConditions(directionsDisplay.directions);
     $('#accordion').accordion('option', 'active', 1);
-    $('#gpx_download_link').button('option', 'disabled', false );
+    //$('#gpx_download_link').button('option', 'disabled', false );
+    $('#button_download_gpx').button('option', 'disabled', false );
     $('#select_reduce_points').removeAttr('disabled');
     $('#button_add_elevation').button('option', 'disabled', false );
   });
@@ -492,10 +492,6 @@ function initialize(){
   }).attr('title', 'add elevation to each trkpt element from Google Maps Elevation API');
   $('#graph_canvas').click(function(){
     $('#button_add_elevation').click();
-  });
-
-  $('#input_download_filename').change(function(){
-    $('#gpx_download_link').attr('download', $(this).val());
   });
 
   createGPXDownloadLink();
