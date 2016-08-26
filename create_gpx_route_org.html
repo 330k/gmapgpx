@@ -267,17 +267,17 @@ $(function(){
         console.log('after  sideWidth : ' + sideWidth);
       }
       if(graphHeight > 0){
-        console.log('before graphHeight : ' + $('#graph_canvas').height());
+        console.log('before graphHeight : ' + $('#graph_panel').height());
         console.log('loaded graphHeight : ' + graphHeight);
         var mapHeight = $('#center_panel').innerHeight() - graphHeight;
         $('#map_canvas').height(mapHeight);
-        $('#graph_canvas').css({
+        $('#graph_panel').css({
           //top : mapHeight,
           height: graphHeight  
         });
         console.log('after  mapHeight : ' + $('#map_canvas').height());
-        console.log('after  graphTop    : ' + $('#graph_canvas').css('top'));
-        console.log('after  graphHeight : ' + $('#graph_canvas').height());
+        console.log('after  graphTop    : ' + $('#graph_panel').css('top'));
+        console.log('after  graphHeight : ' + $('#graph_panel').height());
       }
       $(window).trigger('resize');
     //});
