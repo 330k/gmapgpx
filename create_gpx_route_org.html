@@ -217,24 +217,24 @@ function initialize(){
         }
         google.maps.event.trigger(map, 'resize');
         console.log('google map resized window');
-      }, 200);
+      }, 50);
     });
   })();
   $('#side_panel').resizable({
     handles: 'e',
     minWidth: 200,
-    maxWidth: 500,
+    maxWidth: 500/*,
     stop: function(event, ui){
       var sideWidth = $('#side_panel').width();
       
       $('#center_panel').width($('body').innerWidth() - sideWidth);
       $('#graph_panel').resize();
-    }
+    }*/
   });
   $('#graph_panel').resizable({
     handles: 'n',
     minHeight: 100,
-    maxHeight: 400,
+    maxHeight: 400/*,
     stop: function(event, ui){
       var graphHeight = $('#graph_panel').height();
       
@@ -242,7 +242,7 @@ function initialize(){
       if(typeof $('#graph_canvas').highcharts() !== 'undefined'){
         $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
       }
-    }
+    }*/
   });
   
   // UIサイズを保存
@@ -275,7 +275,7 @@ function initialize(){
         console.log('before graphHeight : ' + $('#graph_canvas').height());
         console.log('loaded graphHeight : ' + graphHeight);
         $('#graph_canvas').css({
-          top : $('#center_panel').innerHeight() - graphHeight,
+          //top : $('#center_panel').innerHeight() - graphHeight,
           height: graphHeight  
         }).resize();
         console.log('after  graphTop    : ' + $('#graph_canvas').css('top'));
