@@ -219,9 +219,9 @@ function initialize(){
       google.maps.event.addListener(map, 'tilesloaded', function(){
         $.mobile.loading('hide');
       });
+      google.maps.event.trigger(map, 'resize');
+      map.setZoom(map.getZoom());
     }
-    google.maps.event.trigger(map, 'resize');
-    map.setZoom(map.getZoom());
   });
   
   $('body > div[id!="page_map"], #graph_canvas').on('swipeleft', function(){
