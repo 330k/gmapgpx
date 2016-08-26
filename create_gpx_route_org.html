@@ -325,7 +325,6 @@ function initialize(){
     createGPXFromDirections(directionsDisplay.directions);
     updateSearchConditions(directionsDisplay.directions);
     $('#accordion').accordion('option', 'active', 1);
-    //$('#gpx_download_link').button('option', 'disabled', false );
     $('#button_download_gpx').button('option', 'disabled', false );
     $('#select_reduce_points').removeAttr('disabled');
     $('#button_add_elevation').button('option', 'disabled', false );
@@ -433,7 +432,6 @@ function initialize(){
     event.preventDefault();
   });
 
-  //$('#gpx_download_link').button({ disabled: true }).attr('title', 'download gpx file to your PC');
   $('#button_download_gpx').button({disabled: true}).click(function(){
     var $downloadLink = $('<a></a>');
     var gpx = $('#gpx_text').val();
@@ -464,7 +462,7 @@ function initialize(){
       window.navigator.msSaveBlob(blob, filename); 
     } else {
       // Chrome, Firefox, Edge
-      $downloadLink.click();
+      $downloadLink.appendTo($('body')).click();
     }
     
   });
