@@ -227,10 +227,6 @@ function initialize(){
     $('#center_panel').width($('body').innerWidth() - sideWidth);
     
     $('#graph_panel').resize();
-    if(typeof localStorage !== 'undefined'){
-      localStorage.setItem('side_panel_width', sideWidth);
-      console.log('save   sideWidth : ' + sideWidth);
-    }
   });
   $('#graph_panel').resizable({
     handles: 'n',
@@ -242,13 +238,23 @@ function initialize(){
     if(typeof $('#graph_canvas').highcharts() !== 'undefined'){
       $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
     }
-    if(typeof localStorage !== 'undefined'){
-      localStorage.setItem('graph_panel_height', graphHeight);
-      console.log('save   graphHeight : ' + graphHeight);
-    }
   });
   
-  // ユーザの保存値を復元
+  // UIサイズを保存
+  if(typeof localStorage !== 'undefined'){
+    $(window).on('unload', function(){
+      var sideWidth = $('#side_panel').width();
+      var graphHeight = $('#graph_panel').height();
+      
+      localStorage.setItem('side_panel_width', sideWidth);
+      localStorage.setItem('graph_panel_height', graphHeight);
+      
+      console.log('save   sideWidth : ' + sideWidth);
+      console.log('save   graphHeight : ' + graphHeight);
+    });
+  }
+  
+  // UIサイズの保存値を復元
   if(typeof localStorage !== 'undefined'){
     (function(){
       var sideWidth = localStorage.getItem('side_panel_width');
@@ -260,17 +266,15 @@ function initialize(){
         $('#side_panel').width(sideWidth).resize();
         console.log('after  sideWidth : ' + sideWidth);
       }
-      setTimeout(function(){
-        if(graphHeight > 0){
-          console.log('before graphHeight : ' + $('#graph_canvas').height());
-          console.log('stored graphHeight : ' + graphHeight);
-          $('#graph_canvas').css({
-            top : $('#center_panel').innerHeight() - graphHeight,
-            height: graphHeight  
-          }).resize();
-          console.log('after  graphHeight : ' + $('#graph_canvas').height());
-        }
-      },500);
+      if(graphHeight > 0){
+        console.log('before graphHeight : ' + $('#graph_canvas').height());
+        console.log('stored graphHeight : ' + graphHeight);
+        $('#graph_canvas').css({
+          top : $('#center_panel').innerHeight() - graphHeight,
+          height: graphHeight  
+        }).resize();
+        console.log('after  graphHeight : ' + $('#graph_canvas').height());
+      }
     })();
   }
   
