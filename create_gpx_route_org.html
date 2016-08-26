@@ -207,24 +207,20 @@ function initialize(){
         clearTimeout(timer);
       }
       timer = setTimeout(function() {
+        $('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
+        $('#graph_panel').resize();
         google.maps.event.trigger(map, 'resize');
         console.log('google map resized window');
       }, 100);
-      $('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
     });
   })();
-  $('#map_canvas').resize(function() {
-    google.maps.event.trigger(map, 'resize');
-    console.log('google map resized #map_canvas');
-  });
   $('#side_panel').resizable({
     handles: 'e',
     minWidth: 200,
     maxWidth: 500
   }).resize(function(){
-    var sideWidth = $('#side_panel').width();
-    
-    $('#center_panel').width($('body').innerWidth() - sideWidth);
+    $('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
+    $('#graph_panel').resize();
   });
   $('#graph_panel').resizable({
     handles: 'n',
@@ -248,8 +244,8 @@ function initialize(){
       localStorage.setItem('side_panel_width', sideWidth);
       localStorage.setItem('graph_panel_height', graphHeight);
       
-      console.log('save   sideWidth : ' + sideWidth);
-      console.log('save   graphHeight : ' + graphHeight);
+      console.log('saved  sideWidth : ' + sideWidth);
+      console.log('saved  graphHeight : ' + graphHeight);
     });
   }
   
@@ -267,11 +263,12 @@ function initialize(){
       }
       if(graphHeight > 0){
         console.log('before graphHeight : ' + $('#graph_canvas').height());
-        console.log('stored graphHeight : ' + graphHeight);
+        console.log('loaded graphHeight : ' + graphHeight);
         $('#graph_canvas').css({
           top : $('#center_panel').innerHeight() - graphHeight,
           height: graphHeight  
         }).resize();
+        console.log('after  graphTop    : ' + $('#graph_canvas').css('top'));
         console.log('after  graphHeight : ' + $('#graph_canvas').height());
       }
     })();
