@@ -158,7 +158,7 @@ body  { height: 100%; margin: 0; padding: 0; user-select: none;}
 <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
 <script type="text/javascript" defer="defer">
 /* global $, google, BlobBuilder */
-var map = null,
+var map = undefined,
   gpxdata = {
     name: '',
     bounds: {
@@ -167,7 +167,7 @@ var map = null,
     desc: '',
     trksegs: [[]]
   },
-  directionsDisplay = null;
+  directionsDisplay = undefined;
 
 // HTTPはHTTPSへリダイレクト
 if(location.protocol == 'http:') {
@@ -257,7 +257,7 @@ function initialize(){
       $('#graph_canvas').highcharts().setSize($('#graph_canvas').innerWidth(), $('#graph_canvas').innerHeight());
     }
     
-    if(typeof map !== 'object'){
+    if(typeof map === 'undefined'){
       // Google Maps Initialize
       $.mobile.loading('show', {
         text: 'initializing google maps...',
