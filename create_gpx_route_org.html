@@ -449,19 +449,21 @@ function initialize(){
         blob = bb.getBlob('application/xml');
       }
       
-      $downloadLink.attr({href : window.URL.createObjectURL(blob)});
-    }else{
       $downloadLink.attr({
         download: filename,
+        href : window.URL.createObjectURL(blob)
+      });
+    }else{
+      $downloadLink.attr({
         href: 'data:application/octet-stream,' + encodeURIComponent(gpx),
         target: '_blank'
       });
     }
     if (window.navigator.msSaveBlob) { 
-      // IE
+      // IE, Edge
       window.navigator.msSaveBlob(blob, filename); 
     } else {
-      // Chrome, Firefox, Edge
+      // Chrome, Firefox
       $downloadLink.appendTo($('body')).click();
     }
     
