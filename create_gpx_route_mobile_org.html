@@ -391,7 +391,7 @@ function calcRoute() {
 function createGPXFromDirections(response){
   'use strict';
   var route = response.routes[0],
-    bounds = route.bounds.toUrlValue().split(',');
+    bounds = route.bounds.toUrlValue().split(','),
     lat = 0.0,
     lng = 0.0,
     oldlat = 540.0,
