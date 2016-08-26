@@ -255,7 +255,7 @@ function initialize(){
       if(sideWidth > 0){
         console.log('before sideWidth : ' + $('#side_panel').width());
         console.log('stored sideWidth : ' + sideWidth);
-        $('#side_panel').width(sideWidth).resize();
+        $('#side_panel').width(sideWidth);
         console.log('after  sideWidth : ' + sideWidth);
       }
       if(graphHeight > 0){
@@ -266,11 +266,12 @@ function initialize(){
         $('#graph_canvas').css({
           top : mapHeight,
           height: graphHeight  
-        }).resize();
+        });
         console.log('after  mapHeight : ' + $('#map_canvas').height());
         console.log('after  graphTop    : ' + $('#graph_canvas').css('top'));
         console.log('after  graphHeight : ' + $('#graph_canvas').height());
       }
+      $(window).trigger('resize');
     });
   }
   
