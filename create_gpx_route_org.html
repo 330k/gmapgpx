@@ -207,8 +207,14 @@ function initialize(){
         clearTimeout(timer);
       }
       timer = setTimeout(function() {
-        $('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
-        $('#graph_panel').resize();
+        var sideWidth = $('#side_panel').width();
+        var graphHeight = $('#graph_panel').height();
+        
+        $('#center_panel').width($('body').innerWidth() - sideWidth);
+        $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight);
+        if(typeof $('#graph_canvas').highcharts() !== 'undefined'){
+          $('#graph_canvas').highcharts().setSize($('#graph_panel').innerWidth(), graphHeight);
+        }
         google.maps.event.trigger(map, 'resize');
         console.log('google map resized window');
       }, 100);
@@ -217,16 +223,17 @@ function initialize(){
   $('#side_panel').resizable({
     handles: 'e',
     minWidth: 200,
-    maxWidth: 500
-  }).resize(function(){
-    $('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
-    $('#graph_panel').resize();
+    maxWidth: 500,
+    stop: function(event, ui){
+      $('#center_panel').width($('body').innerWidth() - $('#side_panel').width());
+      $('#graph_panel').resize();
+    }
   });
   $('#graph_panel').resizable({
     handles: 'n',
     minHeight: 100,
-    maxHeight: 400
-  }).resize(function(){
+    maxHeight: 400,
+    stop: function(event, ui){
     var graphHeight = $('#graph_panel').height();
     
     $('#map_canvas').height($('#center_panel').innerHeight() - graphHeight);
