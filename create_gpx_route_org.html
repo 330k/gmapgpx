@@ -207,14 +207,14 @@ function initialize(){
       
       if(sideWidth > 0){
         console.log('before sideWidth : ' + $('#side_panel').width());
-        console.log('saved  sideWidth : ' + sideWidth);
+        console.log('stored sideWidth : ' + sideWidth);
         $('#side_panel').width(sideWidth).resize();
         console.log('after  sideWidth : ' + sideWidth);
       }
       setTimeout(function(){
         if(graphHeight > 0){
           console.log('before graphHeight : ' + $('#graph_canvas').height());
-          console.log('saved  graphHeight : ' + graphHeight);
+          console.log('stored graphHeight : ' + graphHeight);
           $('#graph_canvas').css({
             top : $('#center_panel').innerHeight() - graphHeight,
             height: graphHeight  
@@ -226,7 +226,7 @@ function initialize(){
   }
   
   // Resizeイベントでマップ更新
-  (function(){
+  /*(function(){
     var timer = false;
     
     $('#map_canvas').resize(function() {
@@ -235,18 +235,6 @@ function initialize(){
       }
       timer = setTimeout(function() {
         google.maps.event.trigger(map, 'resize');
-      }, 100);
-    });
-  })();
-  /*(function(){
-    var timer = false;
-    
-    $(window).resize(function(){
-      if (timer !== false) {
-        clearTimeout(timer);
-      }
-      timer = setTimeout(function() {
-        $('#side_panel').resize();
       }, 100);
     });
   })();*/
@@ -265,7 +253,7 @@ function initialize(){
     $('#graph_panel').resize();
     if(typeof localStorage !== 'undefined'){
       localStorage.setItem('side_panel_width', sideWidth);
-      console.log('stored sideWidth : ' + sideWidth);
+      console.log('save   sideWidth : ' + sideWidth);
     }
   });
   $('#graph_panel').resizable({
@@ -280,7 +268,7 @@ function initialize(){
     }
     if(typeof localStorage !== 'undefined'){
       localStorage.setItem('graph_panel_height', graphHeight);
-      console.log('stored graphHeight : ' + graphHeight);
+      console.log('save   graphHeight : ' + graphHeight);
     }
   });
   
