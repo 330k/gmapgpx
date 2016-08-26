@@ -379,7 +379,6 @@ function calcRoute() {
   
   directionsService = new google.maps.DirectionsService();
   directionsService.route(request, function(response, status) {
-    console.log(response);
     if (status === google.maps.DirectionsStatus.OK) {
       $('#page_map').one('pageshow', function(){
         directionsDisplay.setDirections(response);
