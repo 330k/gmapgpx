@@ -512,7 +512,6 @@ function createGPXDownloadLink(){
     window.URL = window.URL || window.webkitURL;
     window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
     if(window.URL && window.URL.createObjectURL){
-      blob = null;
       try{
         blob = new Blob([gpx], {type:'application/xml'});
       }catch(err){
@@ -521,7 +520,9 @@ function createGPXDownloadLink(){
         blob = bb.getBlob('application/xml');
       }
       
-      e.href = window.URL.createObjectURL(blob);
+      if(blob){
+        e.href = window.URL.createObjectURL(blob);
+      }
     }else{
       e.href = 'data:application/octet-stream,' + encodeURIComponent(gpx);
       e.setAttribute('target', '_blank');
