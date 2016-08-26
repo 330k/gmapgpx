@@ -465,14 +465,14 @@ function updateSearchConditions(response){
 
 function createGPXDownloadLink(){
   'use strict';
-  try{
-    var buf = [],
-      trkseg = gpxdata.trksegs[0],
-      i = 0,
-      e = null
-      blob = null
-      bb = null;
+  var buf = [],
+    trkseg = gpxdata.trksegs[0],
+    i = 0,
+    e = null,
+    blob = null,
+    bb = null;
     
+  try{
     buf.push('<?xml version="1.0" encoding="UTF-8"?>');
     buf.push('<gpx' +
       ' version="1.0"' +
