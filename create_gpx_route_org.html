@@ -267,10 +267,13 @@ function initialize(){
       }
       setTimeout(function(){
         if(graphHeight > 0){
-          console.log('graphHeight : ' + graphHeight);
-          $('#graph_canvas').css({top : $('#center_panel').innerHeight() - graphHeight});
-          $('#graph_canvas').height(graphHeight);
-          console.log('graphHeight : ' + $('#graph_canvas').height());
+          console.log('before graphHeight : ' + $('#graph_canvas').height());
+          console.log('saved  graphHeight : ' + graphHeight);
+          $('#graph_canvas').css({
+            top : $('#center_panel').innerHeight() - graphHeight,
+            height: graphHeight  
+          }).resize();
+          console.log('after  graphHeight : ' + $('#graph_canvas').height());
         }
       },500);
     })();
