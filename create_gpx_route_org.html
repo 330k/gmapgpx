@@ -20,7 +20,7 @@
 <meta name="msapplication-TileColor" content="#da532c" />
 <meta name="theme-color" content="#ffffff" />
 
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css" />
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/redmond/jquery-ui.css" />
 <link rel="apple-touch-icon" sizes="57x57" href="apple-touch-icon-57x57.png" />
 <link rel="apple-touch-icon" sizes="60x60" href="apple-touch-icon-60x60.png" />
 <link rel="apple-touch-icon" sizes="72x72" href="apple-touch-icon-72x72.png" />
@@ -59,7 +59,7 @@ html,body  { width: 100%; height: 100%; margin: 0; padding: 0; }
 #button_add_elevation  { width: 100%; }
 #gpx_text  { width: 100%; height : 80%; font-size: 10px; overflow: auto; }
 
-#popup_menu { display: none; position: absolute; }
+#popup_menu { display: none; position: absolute; width: 200px; }
 #dialog { display: none; }
 
 button.ui-dialog-titlebar-close  { display: none; }
@@ -343,66 +343,69 @@ function initialize(){
 
   // Right Click on Map
   $('#popup_menu').menu().on('mouseleave', function(){
-    setTimeout(function(){$('#popup_menu').hide();}, 200);
+    setTimeout(function(){$('#popup_menu').hide();}, 500);
   });
-  google.maps.event.addListener(map, 'rightclick', function(point) {
-    (function(lat, lng){
-      $('#popup_menu_set_origin').off('click').click(function(event){
-        event.preventDefault();
-        $('#input_origin').val(lat + ',' + lng);
-        $('#popup_menu').hide();
-        $('#accordion').accordion('option', 'active', 0);
-        if(typeof gpxdata.trksegs[0][0] !== 'undefined'){
-          calcRoute(directionsDisplay);
-        }
+  (function(){
+    var lat = 0.0;
+    var lng = 0.0;
+    $('#popup_menu_set_origin').off('click').click(function(event){
+      event.preventDefault();
+      $('#input_origin').val(lat + ',' + lng);
+      $('#popup_menu').hide();
+      $('#accordion').accordion('option', 'active', 0);
+      if(typeof gpxdata.trksegs[0][0] !== 'undefined'){
+        calcRoute(directionsDisplay);
+      }
+    });
+    $('#popup_menu_set_destination').off('click').click(function(event){
+      event.preventDefault();
+      $('#input_destination').val(lat + ',' + lng);
+      $('#popup_menu').hide();
+      $('#accordion').accordion('option', 'active', 0);
+      if(typeof gpxdata.trksegs[0][0] !== 'undefined'){
+        calcRoute(directionsDisplay);
+      }
+    });
+    $('#popup_menu_clear_waypoints').off('click').click(function(event){
+      event.preventDefault();
+      $('#waypoints input').each(function(){
+        $(this).val('');
       });
-      $('#popup_menu_set_destination').off('click').click(function(event){
-        event.preventDefault();
-        $('#input_destination').val(lat + ',' + lng);
-        $('#popup_menu').hide();
-        $('#accordion').accordion('option', 'active', 0);
-        if(typeof gpxdata.trksegs[0][0] !== 'undefined'){
-          calcRoute(directionsDisplay);
-        }
+      $('#popup_menu').hide();
+      if(typeof gpxdata.trksegs[0][0] !== 'undefined'){
+        calcRoute(directionsDisplay);
+      }
+    });
+    $('#popup_menu_reverse_origin_destination').off('click').click(function(event){
+      var i, buf = [];
+      event.preventDefault();
+      
+      buf.push($('#input_origin').val());
+      $('#waypoints input').each(function(){
+        buf.push($(this).val());
       });
-      $('#popup_menu_clear_waypoints').off('click').click(function(event){
-        event.preventDefault();
-        $('#waypoints input').each(function(){
-          $(this).val('');
-        });
-        $('#popup_menu').hide();
-        if(typeof gpxdata.trksegs[0][0] !== 'undefined'){
-          calcRoute(directionsDisplay);
-        }
+      buf.push($('#input_destination').val());
+      
+      $('#input_origin').val(buf.pop());
+      $('#waypoints input').each(function(){
+        $(this).val(buf.pop());
       });
-      $('#popup_menu_reverse_origin_destination').off('click').click(function(event){
-        var i, buf = [];
-        event.preventDefault();
-        
-        buf.push($('#input_origin').val());
-        $('#waypoints input').each(function(){
-          buf.push($(this).val());
-        });
-        buf.push($('#input_destination').val());
-        
-        $('#input_origin').val(buf.pop());
-        $('#waypoints input').each(function(){
-          $(this).val(buf.pop());
-        });
-        $('#input_destination').val(buf.pop());
+      $('#input_destination').val(buf.pop());
 
-        $('#popup_menu').hide();
-        if(typeof gpxdata.trksegs[0][0] !== 'undefined'){
-          calcRoute(directionsDisplay);
-        }
-      });
-    })(point.latLng.lat().toFixed(5), point.latLng.lng().toFixed(5));
-    $('#popup_menu').css({
-      'left': point.pixel.x + $('#map_canvas').position().left + $('#center_panel').position().left,
-      'top': point.pixel.y + $('#map_canvas').position().top + $('#center_panel').position().top
-    }).show();
-    console.log('rightclicked');
-  });
+      $('#popup_menu').hide();
+      if(typeof gpxdata.trksegs[0][0] !== 'undefined'){
+        calcRoute(directionsDisplay);
+      }
+    });
+    google.maps.event.addListener(map, 'rightclick', function(point) {
+      lat = point.latLng.lat().toFixed(5);
+      lng = point.latLng.lng().toFixed(5);
+      $('#popup_menu').css({
+        'left': point.pixel.x + $('#map_canvas').position().left + $('#center_panel').position().left,
+        'top': point.pixel.y + $('#map_canvas').position().top + $('#center_panel').position().top
+      }).show();
+    });
+  })();
   google.maps.event.addListener(map, 'click', function(point) {
     $('#popup_menu').hide();
   });
