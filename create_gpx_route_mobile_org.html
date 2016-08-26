@@ -175,29 +175,11 @@ if(location.protocol == 'http:') {
 }
 navigator.standalone = navigator.standalone || (screen.height - document.documentElement.clientHeight < 40);
 
-function initialize(){
-  'use strict';
-  var geocodingService = null;
-  
-  // Google Maps Initialize
-  $.mobile.loading('show', {
-    text: 'initializing google maps...',
-    textVisible: true
-  });
-  map = new google.maps.Map(document.getElementById('map_canvas'), {
-    zoom: 6,
-    mapTypeId: google.maps.MapTypeId.ROADMAP,
-    center: new google.maps.LatLng(35.681382, 139.766084)
-  });
-  directionsDisplay.setMap(map);
-  google.maps.event.addListener(map, 'tilesloaded', function(){
-    $.mobile.loading('hide');
-  });
-  google.maps.event.trigger(map, 'resize');
-  map.setZoom(map.getZoom());
-  
+// Document Ready
+$(function(){
   // jQuery Mobile Initialize
-  $( "[data-role='header'], [data-role='footer']" ).toolbar();
+  $("[data-role='header'], [data-role='footer']").toolbar();
+  $.mobile.defaultPageTransition = 'none';
   
   $(document).on('pageshow', '[data-role="page"]', function() {
     var current = $(this).jqmData('pagename');
@@ -214,6 +196,59 @@ function initialize(){
       }
     });
   });
+  
+  // Buttons
+  if(navigator.geolocation){
+    $('#set_current_position_as_origin').click(function(){
+      navigator.geolocation.getCurrentPosition(
+        function(position){
+          $('#input_origin').val(position.coords.latitude + ',' + position.coords.longitude);
+        },
+        function(error){
+          console.log(error);
+        }
+      );
+      return false;
+    });
+    $('#set_current_position_as_destination').click(function(){
+      navigator.geolocation.getCurrentPosition(
+        function(position){
+          $('#input_destination').val(position.coords.latitude + ',' + position.coords.longitude);
+        },
+        function(error){
+          console.log(error);
+        }
+      );
+      return false;
+    });
+  }else{
+    $('#set_current_position_as_origin').hide();
+    $('#set_current_position_as_destination').hide();
+  }
+  $('#button_clear_waypoints').click(function(event){
+    $('#waypoints input').each(function(){
+      $(this).val('');
+    });
+    return false;
+  });
+  
+  // GPXページ
+  $('#input_download_filename').change(function(){
+    $('#gpx_download_link').attr('download', $(this).val());
+  });
+  $('#gpx_download_link').button({disabled: true});
+  $('#select_reduce_points').selectmenu({disabled: true}).change(function(){
+    simplifyGPX($('#select_reduce_points').val());
+    createGPXDownloadLink();
+  });
+  
+});
+
+// Google Maps 読み込み後
+function initialize(){
+  'use strict';
+  var geocodingService = null;
+  
   $('#page_map').on('pageshow', function(){
     $('#page_map').css('margin-top', $('#header').height());
     $('#page_map').height($(window).innerHeight() - $('#header').height() * 2 - 2);
@@ -223,6 +258,24 @@ function initialize(){
     
     if(typeof map !== 'object'){
       // Google Maps Initialize
+      $.mobile.loading('show', {
+        text: 'initializing google maps...',
+        textVisible: true
+      });
+      map = new google.maps.Map(document.getElementById('map_canvas'), {
+        zoom: 6,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        center: new google.maps.LatLng(35.681382, 139.766084)
+      });
+      if(typeof directionsDisplay === 'object'){
+        directionsDisplay.setMap(map);
+      }
+      google.maps.event.addListener(map, 'tilesloaded', function(){
+        $.mobile.loading('hide');
+      });
+      google.maps.event.trigger(map, 'resize');
+      map.setZoom(map.getZoom());
+      
     }
   });
   
@@ -237,7 +290,6 @@ function initialize(){
       $(document.body).pagecontainer('change', '#' + prev.id);
     }
   });
-  $.mobile.defaultPageTransition = 'none';
   
   directionsDisplay = new google.maps.DirectionsRenderer({
     draggable: true
@@ -270,49 +322,10 @@ function initialize(){
     }
   });
   
-  // Button Events
-  if(navigator.geolocation){
-    $('#set_current_position_as_origin').click(function(){
-      navigator.geolocation.getCurrentPosition(
-        function(position){
-          $('#input_origin').val(position.coords.latitude + ',' + position.coords.longitude);
-        },
-        function(error){
-          console.log(error);
-        }
-      );
-      return false;
-    });
-    $('#set_current_position_as_destination').click(function(){
-      navigator.geolocation.getCurrentPosition(
-        function(position){
-          $('#input_destination').val(position.coords.latitude + ',' + position.coords.longitude);
-        },
-        function(error){
-          console.log(error);
-        }
-      );
-      return false;
-    });
-  }else{
-    $('#set_current_position_as_origin').hide();
-    $('#set_current_position_as_destination').hide();
-  }
-  $('#button_clear_waypoints').attr('title', 'Clear Waypoints').click(function(event){
-    $('#waypoints input').each(function(){
-      $(this).val('');
-    });
-    return false;
-  });
-  $('#button_calc_route').attr('title', 'calculate route').click(function(event){
+  // Route Button
+  $('#button_calc_route').click(function(event){
     calcRoute();
     event.preventDefault();
-  });
-  
-  $('#gpx_download_link').button({disabled: true}).attr('title', 'download gpx file to your PC');
-  $('#select_reduce_points').selectmenu({disabled: true}).change(function(){
-    simplifyGPX($('#select_reduce_points').val());
-    createGPXDownloadLink();
   });
   
   $('#graph_canvas').click(function(){
@@ -331,10 +344,6 @@ function initialize(){
         });
       }
     });
-  });
-  
-  $('#input_download_filename').change(function(){
-    $('#gpx_download_link').attr('download', $(this).val());
   });
   
   createGPXDownloadLink();
