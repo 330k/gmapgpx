@@ -239,6 +239,7 @@ function initialize(){
     $('#graph_panel').resize();
     if(typeof localStorage !== 'undefined'){
       localStorage.setItem('side_panel_width', sideWidth);
+      console.log('stored sideWidth : ' + sideWidth);
     }
   });
   $('#graph_panel').resizable({
@@ -253,6 +254,7 @@ function initialize(){
     }
     if(typeof localStorage !== 'undefined'){
       localStorage.setItem('graph_panel_height', graphHeight);
+      console.log('stored graphHeight : ' + graphHeight);
     }
   });
   
@@ -263,7 +265,10 @@ function initialize(){
       var graphHeight = localStorage.getItem('graph_panel_height');
       
       if(sideWidth > 0){
+        console.log('before sideWidth : ' + $('#side_panel').width());
+        console.log('saved  sideWidth : ' + sideWidth);
         $('#side_panel').width(sideWidth).resize();
+        console.log('after  sideWidth : ' + sideWidth);
       }
       setTimeout(function(){
         if(graphHeight > 0){
