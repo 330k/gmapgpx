@@ -226,7 +226,7 @@ function initialize(){
   }
   
   // Resizeイベントでマップ更新
-  /*(function(){
+  (function(){
     var timer = false;
     
     $('#map_canvas').resize(function() {
@@ -237,7 +237,7 @@ function initialize(){
         google.maps.event.trigger(map, 'resize');
       }, 100);
     });
-  })();*/
+  })();
   
   // Resizable
   $('#side_panel').resizable({
