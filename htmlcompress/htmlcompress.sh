@@ -1,6 +1,6 @@
 #!/bin/bash
 
-find ./ -iname "*.png" | xargs optipng -preserve -o7
+find ../ -iname "*.png" | xargs optipng -preserve -o7
 
 options="--compress-js --compress-css --preserve-comments --remove-intertag-spaces --remove-quotes --remove-style-attr --remove-link-attr --remove-script-attr --remove-form-attr --remove-surrounding-spaces all"
 java -jar htmlcompressor-1.5.3.jar $options -o ../create_gpx_route.html ../create_gpx_route_org.html 
@@ -14,3 +14,6 @@ cat ../create_gpx_route.html >> ../create_gpx_route_gadget.xml
 echo ']]>
 </Content>
 </Module>' >> ../create_gpx_route_gadget.xml
+
+
+read

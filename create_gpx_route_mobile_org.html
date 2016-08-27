@@ -276,9 +276,8 @@ function initialize(){
         $.mobile.loading('hide');
       });
       google.maps.event.trigger(map, 'resize');
-      map.setZoom(map.getZoom());
-      
     }
+    map.setZoom(map.getZoom());
   });
   
   $('body > div[id!="page_map"], #graph_canvas').on('swipeleft', function(){
