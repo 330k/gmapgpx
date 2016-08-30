@@ -551,7 +551,7 @@ function createGPXDownloadLink(){
         '<div>Total Distance: ' + (info.total_distance * 0.001).toFixed(3) + ' km<\/div>' +
         '<div>Total Elevation: ' + info.total_elevation.toFixed(2) + ' m<\/div>'
       );
-      $('#graph_canvas').highcharts(createGraphData());
+      $('#graph_canvas').highcharts(createGraphData()).setSize($('#graph_canvas').innerWidth(), $('#graph_canvas').innerHeight());
     }, 0);
     
   }catch(err){
