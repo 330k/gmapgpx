@@ -244,6 +244,11 @@ $(function(){
   
   // localStorage対応時
   if(typeof localStorage !== 'undefined'){
+    // 保存値をlocalStorageから読み出す
+    var sideWidth = localStorage.getItem('side_panel_width'),
+      graphHeight = localStorage.getItem('graph_panel_height'),
+      reducePoints = localStorage.getItem('reduce_points');
+
     // UIサイズを保存
     $(window).on('unload', function(){
       var sideWidth = $('#side_panel').width(),
@@ -253,10 +258,12 @@ $(function(){
       localStorage.setItem('graph_panel_height', graphHeight);
     });
     
-    // UIサイズの保存値を復元
-    var sideWidth = localStorage.getItem('side_panel_width'),
-      graphHeight = localStorage.getItem('graph_panel_height');
-    
+    // 削減点数を保存
+    $('#select_reduce_points').change(function(){
+      localStorage.setItem('reduce_points', $(this).val());
+    });
+
+    // 保存値を復元
     if(sideWidth > 0){
       $('#side_panel').width(sideWidth);
     }
@@ -268,6 +275,9 @@ $(function(){
       });
     }
     $(window).trigger('resize');
+    if(reducePoints > 0){
+      $('#select_reduce_points').val(reducePoints);
+    }
   }
   
   // Sortable
