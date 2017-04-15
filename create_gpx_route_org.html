@@ -532,7 +532,7 @@ function calcRoute(directionsDisplay) {
     waypoints: waypoints,
     optimizeWaypoints: $('#input_optimize_waypoints').prop('checked')
   };
-  window.history.pushState(request, null, null);
+  window.history.pushState(request, null);
 }
 $(window).on('popstate', function(e){
   'use strict';
@@ -540,7 +540,7 @@ $(window).on('popstate', function(e){
     directionsService = null;
   
   e.preventDefault();
-  request = history.state;
+  request = e.state;
   $('#dialog').dialog({
     title: 'Route Calculation'
   }).html('calculating...').dialog('open');
