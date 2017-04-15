@@ -534,7 +534,7 @@ function calcRoute(directionsDisplay) {
   };
   window.history.pushState(request, null);
 }
-$(window).on('popstate', function(e){
+window.addEventListener('popstate', function(e){
   'use strict';
   var request = null,
     directionsService = null;
