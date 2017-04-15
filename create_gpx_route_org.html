@@ -540,7 +540,7 @@ $(window).on('popstate', function(e){
     directionsService = null;
   
   e.preventDefault();
-  request = e.state;
+  request = history.state;
   $('#dialog').dialog({
     title: 'Route Calculation'
   }).html('calculating...').dialog('open');
