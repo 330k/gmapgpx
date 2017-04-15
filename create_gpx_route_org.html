@@ -554,7 +554,7 @@ function calcRoute(directionsDisplay) {
     }
   });
 
-  window.history.pushState(request, null, null);
+  window.history.pushState(request, null, JSON.stringify(request));
 }
 
 // GoogleからのレスポンスからGPXを生成
