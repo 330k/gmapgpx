@@ -181,6 +181,7 @@ button.ui-dialog-titlebar-close  { display: none; }
 <script type="text/javascript" defer="defer">
 /* global $, google, BlobBuilder */
 var map = null,
+  directionsDisplay = null;
   gpxdata = {
     name: '',
     bounds: {
@@ -389,7 +390,6 @@ $(function(){
 // 初期化(Google Maps API読み込み後に実行)
 function initialize(){
   'use strict';
-  var directionsDisplay = null;
   
   // Google Maps Initialize
   map = new google.maps.Map(document.getElementById('map_canvas'), {
@@ -405,7 +405,7 @@ function initialize(){
   
   // Route Calculate Button
   $('#button_calc_route').button().click(function(event){
-    calcRoute(directionsDisplay);
+    calcRoute();
     event.preventDefault();
   });
   
@@ -451,7 +451,7 @@ function initialize(){
       $('#popup_menu').hide();
       $('#accordion').accordion('option', 'active', 0);
       if(typeof gpxdata.trksegs[0][0] !== 'undefined'){
-        calcRoute(directionsDisplay);
+        calcRoute();
       }
     });
     $('#popup_menu_set_destination').click(function(event){
@@ -460,7 +460,7 @@ function initialize(){
       $('#popup_menu').hide();
       $('#accordion').accordion('option', 'active', 0);
       if(typeof gpxdata.trksegs[0][0] !== 'undefined'){
-        calcRoute(directionsDisplay);
+        calcRoute();
       }
     });
     $('#popup_menu_clear_waypoints').click(function(event){
@@ -470,7 +470,7 @@ function initialize(){
       });
       $('#popup_menu').hide();
       if(typeof gpxdata.trksegs[0][0] !== 'undefined'){
-        calcRoute(directionsDisplay);
+        calcRoute();
       }
     });
     $('#popup_menu_reverse_origin_destination').click(function(event){
@@ -491,7 +491,7 @@ function initialize(){
 
       $('#popup_menu').hide();
       if(typeof gpxdata.trksegs[0][0] !== 'undefined'){
-        calcRoute(directionsDisplay);
+        calcRoute();
       }
     });
     google.maps.event.addListener(map, 'rightclick', function(point) {
@@ -511,7 +511,7 @@ function initialize(){
 }
 
 // Google Maps APIでルートを検索
-function calcRoute(directionsDisplay) {
+function calcRoute() {
   'use strict';
   var waypoints = [],
     request = null;
@@ -533,18 +533,16 @@ function calcRoute(directionsDisplay) {
     waypoints: waypoints,
     optimizeWaypoints: $('#input_optimize_waypoints').prop('checked')
   };
-  window.history.pushState({directionsDisplay: directionsDisplay, request: request}, null);
+  window.history.pushState(request, null);
   $(window).trigger('popstate');
 }
 window.addEventListener('popstate', function(e){
   'use strict';
   var request = null,
-    directionsDisplay = null;
     directionsService = null;
   
   e.preventDefault();
   request = history.state.request;
-  directionsDisplay = history.state.directionsDisplay;
 
   $('#dialog').dialog({
     title: 'Route Calculation'
