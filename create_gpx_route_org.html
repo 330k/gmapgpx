@@ -513,9 +513,8 @@ function initialize(){
 // Google Maps APIでルートを検索
 function calcRoute(directionsDisplay) {
   'use strict';
-  var waypoints = [],
-    request = null,
-    directionsService = null;
+  var waypoints = [];
+
   $('#waypoints input').each(function(){
     if($(this).val() !== ''){
       waypoints.push({
@@ -533,6 +532,15 @@ function calcRoute(directionsDisplay) {
     waypoints: waypoints,
     optimizeWaypoints: $('#input_optimize_waypoints').prop('checked')
   };
+  window.history.pushState(request, null, null);
+}
+$(window).on('popstate', function(e){
+  'use strict';
+  var request = null,
+    directionsService = null;
+  
+  e.preventDefault();
+  request = e.state;
   $('#dialog').dialog({
     title: 'Route Calculation'
   }).html('calculating...').dialog('open');
@@ -554,8 +562,7 @@ function calcRoute(directionsDisplay) {
     }
   });
 
-  window.history.pushState(request, null, JSON.stringify(request));
-}
+});
 
 // GoogleからのレスポンスからGPXを生成
 function createGPXFromDirections(response){
