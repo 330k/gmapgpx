@@ -513,7 +513,8 @@ function initialize(){
 // Google Maps APIでルートを検索
 function calcRoute(directionsDisplay) {
   'use strict';
-  var waypoints = [];
+  var waypoints = [],
+    request = null;
 
   $('#waypoints input').each(function(){
     if($(this).val() !== ''){
@@ -534,7 +535,7 @@ function calcRoute(directionsDisplay) {
   };
   window.history.pushState(request, null);
 }
-window.addEventListener('popstate', function(e){
+$(window).on('popstate', function(e){
   'use strict';
   var request = null,
     directionsService = null;
@@ -562,7 +563,7 @@ window.addEventListener('popstate', function(e){
     }
   });
 
-}, false);
+});
 
 // GoogleからのレスポンスからGPXを生成
 function createGPXFromDirections(response){
