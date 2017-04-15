@@ -542,7 +542,11 @@ window.addEventListener('popstate', function(e){
     directionsService = null;
   
   e.preventDefault();
-  request = history.state.request;
+  request = history.state;
+
+  if(request == null){
+    return;
+  }
 
   $('#dialog').dialog({
     title: 'Route Calculation'
