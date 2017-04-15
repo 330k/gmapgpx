@@ -553,6 +553,8 @@ function calcRoute(directionsDisplay) {
       });
     }
   });
+
+  window.history.pushState(request, null, null);
 }
 
 // GoogleからのレスポンスからGPXを生成
