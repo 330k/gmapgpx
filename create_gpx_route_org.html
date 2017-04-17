@@ -514,7 +514,8 @@ function initialize(){
 function calcRoute() {
   'use strict';
   var waypoints = [],
-    request = null;
+    request = null,
+    directionsService = null;
 
   $('#waypoints input').each(function(){
     if($(this).val() !== ''){
