@@ -533,21 +533,6 @@ function calcRoute() {
     waypoints: waypoints,
     optimizeWaypoints: $('#input_optimize_waypoints').prop('checked')
   };
-  window.history.pushState(request, null);
-  $(window).trigger('popstate');
-}
-window.addEventListener('popstate', function(e){
-  'use strict';
-  var request = null,
-    directionsService = null;
-  
-  e.preventDefault();
-  request = history.state;
-
-  if(request == null){
-    return;
-  }
-
   $('#dialog').dialog({
     title: 'Route Calculation'
   }).html('calculating...').dialog('open');
@@ -557,7 +542,7 @@ window.addEventListener('popstate', function(e){
       directionsDisplay.setDirections(response);
       $('#dialog').dialog('close');
     }else{
-      $('#dialog').html('<span class="ui-icon ui-icon-alert"><\/span>Route Not Found').dialog('option',{
+      $('#dialog').html('<span class="ui-icon ui-icon-alert"><\/span>' + status).dialog('option',{
         buttons: [{
           text: 'OK',
           click: function(e, ui){
@@ -568,7 +553,8 @@ window.addEventListener('popstate', function(e){
       });
     }
   });
-}, false);
+  window.history.pushState(request, null);
+}
 
 // GoogleからのレスポンスからGPXを生成
 function createGPXFromDirections(response){
@@ -622,7 +608,8 @@ function createGPXFromDirections(response){
 function updateSearchConditions(response){
   'use strict';
   var route = response.routes[0],
-    buf = [],
+    waypoints = [],
+    request = null,
     i = 0,
     j = 0;
   
@@ -633,20 +620,60 @@ function updateSearchConditions(response){
   
   for(i = 0; i < route.legs.length; i++){
     for(j = 0; j < route.legs[i].via_waypoints.length; j++){
-      buf.push(route.legs[i].via_waypoints[j].toUrlValue());
+      waypoints.push(route.legs[i].via_waypoints[j].toUrlValue());
     }
-    buf.push(route.legs[i].end_location.toUrlValue());
+    waypoints.push(route.legs[i].end_location.toUrlValue());
   }
-  buf.pop();
+  waypoints.pop();
   
+  request = {
+    origin: $('#input_origin').val(),
+    destination: $('#input_destination').val(),
+    travelMode: google.maps.TravelMode[$('#select_travel_mode').val()],
+    avoidHighways: $('#input_avoid_highways').prop('checked'),
+    avoidTolls: $('#input_avoid_tolls').prop('checked'),
+    waypoints: waypoints,
+    optimizeWaypoints: $('#input_optimize_waypoints').prop('checked')
+  };
+  window.history.pushState(request, null);
+
   $('#waypoints input').each(function(){
-    if(buf.length > 0){
-      $(this).val(buf.shift());
+    if(waypoints.length > 0){
+      $(this).val(waypoints.shift());
     }else{
       $(this).val('');
     }
   });
 }
+
+// History APIイベント
+window.addEventListener('popstate', function(e){
+  'use strict';
+  var request = e.state,
+    directionService = null;
+  
+  $('#dialog').dialog({
+    title: 'Route Calculation'
+  }).html('calculating...').dialog('open');
+  directionsService = new google.maps.DirectionsService();
+  directionsService.route(request, function(response, status){
+    if (status === google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response);
+      $('#dialog').dialog('close');
+    }else{
+      $('#dialog').html('<span class="ui-icon ui-icon-alert"><\/span>' + status).dialog('option',{
+        buttons: [{
+          text: 'OK',
+          click: function(e, ui){
+            $(this).dialog('close');
+            $(this).dialog('option', {buttons: []});
+          }
+        }]
+      });
+    }
+  });
+
+}, false);
 
 // GPXダウンロードリンクを生成
 function createGPXDownloadLink(){
