@@ -566,7 +566,7 @@ function calcRoute(request) {
   });
 
   // History APIに状態追加
-  window.history.pushState(request, null);
+  window.history.pushState(JSON.stringify(request), null);
 }
 
 // GoogleからのレスポンスからGPXを生成
@@ -647,13 +647,13 @@ function updateSearchConditions(response){
   });
 
   // History APIに状態追加
-  window.history.pushState(createGoogleMapsRequest(), null);
+  window.history.pushState(JSON.stringify(createGoogleMapsRequest()), null);
 }
 
 // History APIイベント
 window.addEventListener('popstate', function(e){
   'use strict';
-  calcRoute(e.state);
+  calcRoute(JSON.parse(e.state));
   console.log(e.state);
   e.preventDefault();
 }, false);
