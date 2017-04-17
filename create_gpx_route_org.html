@@ -391,7 +391,7 @@ $(function(){
 function initialize(){
   'use strict';
   
-  // Google Maps Initialize
+  // Google Maps 初期化
   map = new google.maps.Map(document.getElementById('map_canvas'), {
     zoom: 6,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -403,13 +403,13 @@ function initialize(){
   directionsDisplay.setMap(map);
   directionsDisplay.setPanel(document.getElementById('directions_panel'));
   
-  // Route Calculate Button
+  // Route Calculate ボタンイベント登録
   $('#button_calc_route').button().click(function(event){
     calcRoute();
     event.preventDefault();
   });
   
-  // Input Check
+  // 入力チェック
   var geocodingService = new google.maps.Geocoder();
   $('#tab_search input[type="text"]').blur(function(){
     var $input = $(this);
@@ -426,7 +426,7 @@ function initialize(){
     }
   });
   
-  // Route Change by Mouse Drag on Map
+  // ルートをドラッグアンドドロップで変更した時のイベント
   google.maps.event.addListener(directionsDisplay, 'directions_changed', function() {
     createGPXFromDirections(directionsDisplay.directions);
     updateSearchConditions(directionsDisplay.directions);
@@ -436,7 +436,7 @@ function initialize(){
     $('#button_add_elevation').button('option', 'disabled', false);
   });
   
-  // Right Click on Map
+  // 地図上で右クリックしたときのイベント
   $('#popup_menu').menu().on('mouseleave', function(){
     setTimeout(function(){
       $('#popup_menu').hide();
@@ -564,6 +564,8 @@ function calcRoute(request) {
       });
     }
   });
+  
+  // History APIに状態追加
   window.history.pushState(request, null);
 }
 
@@ -620,7 +622,6 @@ function updateSearchConditions(response){
   'use strict';
   var route = response.routes[0],
     waypoints = [],
-    request = null,
     i = 0,
     j = 0;
   
@@ -637,17 +638,6 @@ function updateSearchConditions(response){
   }
   waypoints.pop();
   
-  request = {
-    origin: $('#input_origin').val(),
-    destination: $('#input_destination').val(),
-    travelMode: google.maps.TravelMode[$('#select_travel_mode').val()],
-    avoidHighways: $('#input_avoid_highways').prop('checked'),
-    avoidTolls: $('#input_avoid_tolls').prop('checked'),
-    waypoints: waypoints,
-    optimizeWaypoints: $('#input_optimize_waypoints').prop('checked')
-  };
-  window.history.pushState(request, null);
-
   $('#waypoints input').each(function(){
     if(waypoints.length > 0){
       $(this).val(waypoints.shift());
@@ -655,6 +645,9 @@ function updateSearchConditions(response){
       $(this).val('');
     }
   });
+
+  // History APIに状態追加
+  window.history.pushState(createGoogleMapsRequest(), null);
 }
 
 // History APIイベント
