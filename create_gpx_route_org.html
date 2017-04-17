@@ -510,12 +510,10 @@ function initialize(){
   createGPXDownloadLink();
 }
 
-// Google Maps APIでルートを検索
-function calcRoute() {
-  'use strict';
+// フォームの入力からrequestを生成する
+function createGoogleMapsRequest(){
   var waypoints = [],
-    request = null,
-    directionsService = null;
+    request = null;
 
   $('#waypoints input').each(function(){
     if($(this).val() !== ''){
@@ -534,6 +532,18 @@ function calcRoute() {
     waypoints: waypoints,
     optimizeWaypoints: $('#input_optimize_waypoints').prop('checked')
   };
+
+  return request;
+}
+
+// Google Maps APIでルートを検索
+function calcRoute(request) {
+  'use strict';
+  var directionsService = null;
+
+  // requestがundefinedの場合はフォームの入力から生成
+  request = request || createGoogleMapsRequest();
+
   $('#dialog').dialog({
     title: 'Route Calculation'
   }).html('calculating...').dialog('open');
@@ -650,30 +660,7 @@ function updateSearchConditions(response){
 // History APIイベント
 window.addEventListener('popstate', function(e){
   'use strict';
-  var request = e.state,
-    directionsService = null;
-  
-  $('#dialog').dialog({
-    title: 'Route Calculation'
-  }).html('calculating...').dialog('open');
-  directionsService = new google.maps.DirectionsService();
-  directionsService.route(request, function(response, status){
-    if (status === google.maps.DirectionsStatus.OK) {
-      directionsDisplay.setDirections(response);
-      $('#dialog').dialog('close');
-    }else{
-      $('#dialog').html('<span class="ui-icon ui-icon-alert"><\/span>' + status).dialog('option',{
-        buttons: [{
-          text: 'OK',
-          click: function(e, ui){
-            $(this).dialog('close');
-            $(this).dialog('option', {buttons: []});
-          }
-        }]
-      });
-    }
-  });
-
+  calcRoute(e.state);
   e.preventDefault();
 }, false);
 
