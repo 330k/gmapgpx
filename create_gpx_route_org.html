@@ -564,7 +564,7 @@ function calcRoute(request) {
       });
     }
   });
-  
+
   // History APIに状態追加
   window.history.pushState(request, null);
 }
@@ -654,6 +654,7 @@ function updateSearchConditions(response){
 window.addEventListener('popstate', function(e){
   'use strict';
   calcRoute(e.state);
+  console.log(e.state);
   e.preventDefault();
 }, false);
 
