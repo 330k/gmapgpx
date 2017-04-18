@@ -542,8 +542,8 @@ function calcRoute(request) {
   var directionsService = null;
 
   // requestがundefinedの場合はフォームの入力から生成
-  if(typeof request !== undefined){
-    request = request || createGoogleMapsRequest();
+  if(typeof request === undefined){
+    request = createGoogleMapsRequest();
     // History APIに状態追加
     window.history.pushState(request, null);
   }
