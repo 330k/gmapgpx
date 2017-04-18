@@ -542,7 +542,11 @@ function calcRoute(request) {
   var directionsService = null;
 
   // requestがundefinedの場合はフォームの入力から生成
-  request = request || createGoogleMapsRequest();
+  if(typeof request !== undefined){
+    request = request || createGoogleMapsRequest();
+    // History APIに状態追加
+    window.history.pushState(request, null);
+  }
 
   $('#dialog').dialog({
     title: 'Route Calculation'
@@ -564,9 +568,6 @@ function calcRoute(request) {
       });
     }
   });
-
-  // History APIに状態追加
-  window.history.pushState(JSON.stringify(request), null);
 }
 
 // GoogleからのレスポンスからGPXを生成
@@ -647,13 +648,13 @@ function updateSearchConditions(response){
   });
 
   // History APIに状態追加
-  window.history.pushState(JSON.stringify(createGoogleMapsRequest()), null);
+  window.history.pushState(createGoogleMapsRequest(), null);
 }
 
 // History APIイベント
 window.addEventListener('popstate', function(e){
   'use strict';
-  calcRoute(JSON.parse(e.state));
+  calcRoute(e.state);
   console.log(e.state);
   e.preventDefault();
 }, false);
