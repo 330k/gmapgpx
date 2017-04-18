@@ -434,6 +434,9 @@ function initialize(){
     $('#button_download_gpx').button('option', 'disabled', false);
     $('#select_reduce_points').removeAttr('disabled');
     $('#button_add_elevation').button('option', 'disabled', false);
+    // History APIに状態追加
+    window.history.pushState(createGoogleMapsRequest(), null);
+    console.log('pushState');
   });
   
   // 地図上で右クリックしたときのイベント
@@ -647,10 +650,6 @@ function updateSearchConditions(response){
       $(this).val('');
     }
   });
-
-  // History APIに状態追加
-  window.history.pushState(createGoogleMapsRequest(), null);
-  console.log('pushState');
 }
 
 // History APIイベント
