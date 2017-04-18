@@ -546,6 +546,7 @@ function calcRoute(request) {
     request = createGoogleMapsRequest();
     // History APIに状態追加
     window.history.pushState(request, null);
+    console.log('pushState');
   }
 
   $('#dialog').dialog({
@@ -649,6 +650,7 @@ function updateSearchConditions(response){
 
   // History APIに状態追加
   window.history.pushState(createGoogleMapsRequest(), null);
+  console.log('pushState');
 }
 
 // History APIイベント
