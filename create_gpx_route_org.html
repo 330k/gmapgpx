@@ -512,7 +512,14 @@ function initialize(){
       $('#button_add_elevation').button('option', 'disabled', true);
       $('#gpx_text').val('');
 
-      directionsDisplay.setDirections(null);
+      // directionsDisplayを最初期化
+      directionsDisplay.setMap(null);
+      directionsDisplay = new google.maps.DirectionsRenderer({
+        draggable: true
+      });
+      directionsDisplay.setMap(map);
+      directionsDisplay.setPanel(document.getElementById('directions_panel'));
+      
 
       $('#popup_menu').hide();
     });
