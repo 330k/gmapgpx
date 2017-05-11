@@ -172,7 +172,6 @@ button.ui-dialog-titlebar-close  { display: none; }
  <li><div id="popup_menu_set_destination">Set this point as Destination</div></li>
  <li><div id="popup_menu_clear_waypoints">Clear all Waypoints</div></li>
  <li><div id="popup_menu_reverse_origin_destination">Reverse Origin and Destination</div></li>
- <li><div id="popup_menu_clear_route">Clear Route</div></li>
 </ul>
 <div id="dialog"></div>
 
@@ -429,7 +428,7 @@ function initialize(){
   
   // ルートをドラッグアンドドロップで変更した時のイベント
   google.maps.event.addListener(directionsDisplay, 'directions_changed', function() {
-    createGPXFromDirections(directionsDisplay.directions);
+    createGPXFromDirections(directionsDisplay.directions, directionsDisplay.getRouteIndex());
     updateSearchConditions(directionsDisplay.directions);
     $('#accordion').accordion('option', 'active', 1);
     $('#button_download_gpx').button('option', 'disabled', false);
@@ -497,31 +496,6 @@ function initialize(){
       if(typeof gpxdata.trksegs[0][0] !== 'undefined'){
         calcRoute();
       }
-    });
-    $('#popup_menu_clear_route').click(function(event){
-      event.preventDefault();
-
-      $('#input_origin').val('');
-      $('#input_destination').val('');
-      $('#waypoints input').each(function(){
-        $(this).val('');
-      });
-
-      $('#button_download_gpx').button('option', 'disabled', true);
-      $('#select_reduce_points').attr({'disabled' : 'disabled'});
-      $('#button_add_elevation').button('option', 'disabled', true);
-      $('#gpx_text').val('');
-
-      // directionsDisplayを最初期化
-      directionsDisplay.setMap(null);
-      directionsDisplay = new google.maps.DirectionsRenderer({
-        draggable: true
-      });
-      directionsDisplay.setMap(map);
-      directionsDisplay.setPanel(document.getElementById('directions_panel'));
-      
-
-      $('#popup_menu').hide();
     });
     google.maps.event.addListener(map, 'rightclick', function(point) {
       lat = point.latLng.lat().toFixed(5);
@@ -602,9 +576,9 @@ function calcRoute(request, historyupdate) {
 }
 
 // GoogleからのレスポンスからGPXを生成
-function createGPXFromDirections(response){
+function createGPXFromDirections(response, index){
   'use strict';
-  var route = response.routes[0],
+  var route = response.routes[index],
     bounds = route.bounds.toUrlValue().split(','),
     lat = 0.0,
     lng = 0.0,
