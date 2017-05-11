@@ -576,9 +576,9 @@ function calcRoute(request, historyupdate) {
 }
 
 // GoogleからのレスポンスからGPXを生成
-function createGPXFromDirections(response, index){
+function createGPXFromDirections(response, routeindex){
   'use strict';
-  var route = response.routes[index],
+  var route = response.routes[routeindex],
     bounds = route.bounds.toUrlValue().split(','),
     lat = 0.0,
     lng = 0.0,
@@ -588,6 +588,7 @@ function createGPXFromDirections(response, index){
     i = 0,
     j = 0,
     k = 0;
+  console.log(routeindex);
   
   gpxdata.bounds.minlat = bounds[0];
   gpxdata.bounds.minlon = bounds[1];
