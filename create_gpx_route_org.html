@@ -172,6 +172,7 @@ button.ui-dialog-titlebar-close  { display: none; }
  <li><div id="popup_menu_set_destination">Set this point as Destination</div></li>
  <li><div id="popup_menu_clear_waypoints">Clear all Waypoints</div></li>
  <li><div id="popup_menu_reverse_origin_destination">Reverse Origin and Destination</div></li>
+ <li><div id="popup_menu_clear_route">Clear Route</div></li>
 </ul>
 <div id="dialog"></div>
 
@@ -497,6 +498,22 @@ function initialize(){
         calcRoute();
       }
     });
+    $('#popup_menu_clear_route').click(function(event){
+      event.preventDefault();
+
+      $('#input_origin').val('');
+      $('#input_destination').val('');
+      $('#waypoints input').each(function(){
+        $(this).val('');
+      });
+
+      $('#button_download_gpx').button('option', 'disabled', true);
+      $('#select_reduce_points').attr({'disabled' : 'disabled'});
+      $('#button_add_elevation').button('option', 'disabled', true);
+      directionsDisplay.setMap(null);
+
+      $('#popup_menu').hide();
+    });
     google.maps.event.addListener(map, 'rightclick', function(point) {
       lat = point.latLng.lat().toFixed(5);
       lng = point.latLng.lng().toFixed(5);
@@ -540,7 +557,7 @@ function createGoogleMapsRequest(){
 }
 
 // Google Maps APIでルートを検索
-function calcRoute(request) {
+function calcRoute(request, historyupdate) {
   'use strict';
   var directionsService = null;
 
@@ -655,7 +672,7 @@ function updateSearchConditions(response){
 // History APIイベント
 window.addEventListener('popstate', function(e){
   'use strict';
-  calcRoute(e.state);
+  calcRoute(e.state, false);
   console.log(e.state);
   e.preventDefault();
 }, false);
