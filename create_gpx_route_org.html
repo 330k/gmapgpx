@@ -510,7 +510,9 @@ function initialize(){
       $('#button_download_gpx').button('option', 'disabled', true);
       $('#select_reduce_points').attr({'disabled' : 'disabled'});
       $('#button_add_elevation').button('option', 'disabled', true);
-      directionsDisplay.setMap(null);
+      $('#gpx_text').val('');
+
+      directionsDisplay.setDirections(null);
 
       $('#popup_menu').hide();
     });
@@ -550,7 +552,8 @@ function createGoogleMapsRequest(){
     avoidHighways: $('#input_avoid_highways').prop('checked'),
     avoidTolls: $('#input_avoid_tolls').prop('checked'),
     waypoints: waypoints,
-    optimizeWaypoints: $('#input_optimize_waypoints').prop('checked')
+    optimizeWaypoints: $('#input_optimize_waypoints').prop('checked'),
+    provideRouteAlternatives: true
   };
 
   return request;
