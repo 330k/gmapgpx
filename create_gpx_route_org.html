@@ -505,6 +505,11 @@ function initialize(){
         'top': point.pixel.y + $('#map_canvas').position().top + $('#center_panel').position().top
       }).show();
     });
+    document.getElementById("map_canvas").addEventListener("contextmenu", function(evt){
+      console.log(evt);
+      evt.preventDefault();
+      evt.stopPropagation();
+    });
   })();
   google.maps.event.addListener(map, 'click', function(point) {
     $('#popup_menu').hide();
@@ -588,7 +593,6 @@ function createGPXFromDirections(response, routeindex){
     i = 0,
     j = 0,
     k = 0;
-  console.log(routeindex);
   
   gpxdata.bounds.minlat = bounds[0];
   gpxdata.bounds.minlon = bounds[1];
