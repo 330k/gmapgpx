@@ -497,19 +497,15 @@ function initialize(){
         calcRoute();
       }
     });
-    /*google.maps.event.addListener(map, 'rightclick', function(point) {
+    google.maps.event.addListener(map, 'contextmenu', function(point) {
       lat = point.latLng.lat().toFixed(5);
       lng = point.latLng.lng().toFixed(5);
       $('#popup_menu').css({
         'left': point.pixel.x + $('#map_canvas').position().left + $('#center_panel').position().left,
         'top': point.pixel.y + $('#map_canvas').position().top + $('#center_panel').position().top
       }).show();
+      return false;
     });
-    document.getElementById("map_canvas").addEventListener("contextmenu", function(evt){
-      console.log(evt);
-      evt.preventDefault();
-      evt.stopPropagation();
-    });*/
   })();
   google.maps.event.addListener(map, 'click', function(point) {
     $('#popup_menu').hide();
