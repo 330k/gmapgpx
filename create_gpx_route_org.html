@@ -497,7 +497,7 @@ function initialize(){
         calcRoute();
       }
     });
-    google.maps.event.addListener(map, 'rightclick', function(point) {
+    /*google.maps.event.addListener(map, 'rightclick', function(point) {
       lat = point.latLng.lat().toFixed(5);
       lng = point.latLng.lng().toFixed(5);
       $('#popup_menu').css({
@@ -509,7 +509,7 @@ function initialize(){
       console.log(evt);
       evt.preventDefault();
       evt.stopPropagation();
-    });
+    });*/
   })();
   google.maps.event.addListener(map, 'click', function(point) {
     $('#popup_menu').hide();
