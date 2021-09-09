@@ -744,25 +744,24 @@ var calcDistance = (function(){
   'use strict';
   
   var hubeny = (function(){
-    var a = 6378137.0,
-      b = 6356752.314245,
-      f2 = b * b / (a * a),
-      e2 = 1.0 - f2,
-      degree = Math.PI / 180.0,
-      sin = Math.sin,
-      cos = Math.cos,
-      sqrt = Math.sqrt;
+    const a = 6378137.0;
+    const f = 1 / 298.257223563;
+    const e2 = f * (2 - f);
+    const degree = Math.PI / 180.0;
+    const sin = Math.sin;
+    const cos = Math.cos;
+    const sqrt = Math.sqrt;
     return function (lat1, lon1, lat2, lon2){
-      var latdiff = (lat1 - lat2) * degree,
-        londiff = (lon1 - lon2) * degree,
-        latave = 0.5 * (lat1 + lat2) * degree,
-        sinlatave = sin(latave),
-        coslatave = cos(latave),
-        w2 = 1.0 - sinlatave * sinlatave * e2,
-        w = sqrt(w2),
-        meridian = a * f2 / (w2 * w),
-        n = a / w;
-  
+      const latdiff = (lat1 - lat2) * degree;
+      const londiff = (lon1 - lon2) * degree;
+      const latave = 0.5 * (lat1 + lat2) * degree;
+      const sinlatave = sin(latave);
+      const coslatave = cos(latave);
+      const w2 = 1.0 - sinlatave * sinlatave * e2;
+      const w = sqrt(w2);
+      const meridian = a * (1 - e2) / (w2 * w);
+      const n = a / w;
+
       return sqrt(
         latdiff * latdiff * meridian * meridian +
         londiff * londiff * n * n * coslatave * coslatave
