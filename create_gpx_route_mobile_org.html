@@ -795,7 +795,7 @@ var simplifyGPX = (function(){
     for(i = 0; i < trkseg.length; i++){
       pts[i] = [
         trkseg[i].lon * degree,
-        Math.log(Math.abs(Math.tan(quadpi + 0.5 * trkseg[i].lat * degree)))
+        Math.asinh(Math.tan(trkseg[i].lat * degree))
       ];
     }
     
